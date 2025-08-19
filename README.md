@@ -1,6 +1,3 @@
-# java-oop-solid-work
-
-
 <!-- ===== README Görsel Bölümü (Java | SOLID | OOP) ===== -->
 <div align="center" style="margin: 24px 0;">
   <h2 style="margin: 0 0 0px;">Java • SOLID • OOP Notlarım ✍️🚀</h2>
