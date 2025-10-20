@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="982de5e3-5151-4deb-bf54-a36cbf9000de" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/Demo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/Employee.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/Explore25Features.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/KDFDemo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/ModularExample.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/Person.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/RequestHandler.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/tr/com/huseyinaydin/ThreadLocalDemo.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
+  </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;huseyinaydin99&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/huseyinaydin99/java-workshop.git&quot;,
+    &quot;accountId&quot;: &quot;11f15059-b9a9-449d-a8df-63b64a0249e8&quot;
+  }
+}</component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 2
+}</component>
+  <component name="ProjectId" id="34EP8JeNPLMl04C6XEkSqlC7fiR" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.Demo.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Explore25Features.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ThreadLocalDemo.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Huseyin_Aydin/Desktop/java-workshop/explore-java25/src/tr/com/huseyinaydin&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Problems&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Huseyin_Aydin\Desktop\java-workshop\explore-java25\src\tr\com\huseyinaydin" />
+    </key>
+  </component>
+  <component name="RunManager" selected="Application.ThreadLocalDemo">
+    <configuration name="Demo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="UNNAMED_CLASS_CONFIGURATION" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Demo" />
+      <module name="explore-java25" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Explore25Features" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="UNNAMED_CLASS_CONFIGURATION" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Explore25Features" />
+      <module name="explore-java25" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ThreadLocalDemo" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="tr.com.huseyinaydin.ThreadLocalDemo" />
+      <module name="explore-java25" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="tr.com.huseyinaydin.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ThreadLocalDemo" />
+        <item itemvalue="Application.Explore25Features" />
+        <item itemvalue="Application.Demo" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="982de5e3-5151-4deb-bf54-a36cbf9000de" name="Changes" comment="" />
+      <created>1760775598228</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1760775598228</updated>
+    </task>
+    <servers />
+  </component>
+</project>
