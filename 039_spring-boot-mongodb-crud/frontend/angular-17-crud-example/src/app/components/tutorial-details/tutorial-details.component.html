@@ -1,0 +1,76 @@
+@if (viewMode){
+  @if (currentTutorial.id){
+  <h4>Kurs</h4>
+  <div>
+    <label><strong>Başlık:</strong></label> {{ currentTutorial.title }}
+  </div>
+  <div>
+    <label><strong>Açıklama:</strong></label>
+    {{ currentTutorial.description }}
+  </div>
+  <div>
+    <label><strong>Gizlilik Durumu:</strong></label>
+    {{ currentTutorial.published ? "Açık" : "Kapalı" }}
+  </div>
+
+  <a class="badge badge-warning" routerLink="/tutorials/{{ currentTutorial.id }}">
+    Düzenle
+  </a>
+  } @else {<p>Kursa Tıkla..</p>}
+} @else {
+  @if (currentTutorial.id) {
+  <div class="edit-form">
+    <h4>Kurs</h4>
+    <form>
+      <div class="form-group">
+        <label for="title">Başlık</label>
+        <input
+          type="text"
+          class="form-control"
+          id="title"
+          [(ngModel)]="currentTutorial.title"
+          name="title"
+        />
+      </div>
+      <div class="form-group">
+        <label for="description">Açıklam</label>
+        <input
+          type="text"
+          class="form-control"
+          id="description"
+          [(ngModel)]="currentTutorial.description"
+          name="description"
+        />
+      </div>
+
+      <div class="form-group">
+        <label><strong>Gizlilik Durumu:</strong></label>
+        {{ currentTutorial.published ? "Açık" : "Kapalı" }}
+      </div>
+    </form>
+
+    @if (currentTutorial.published) {
+    <button class="badge badge-primary mr-2"
+      (click)="updatePublished(false)" >
+      Gizle
+    </button>
+    } @else {
+    <button class="badge badge-primary mr-2" (click)="updatePublished(true)">
+      Gizliliği Aç
+    </button>
+    }
+
+    <button class="badge badge-danger mr-2" (click)="deleteTutorial()">
+      Sil
+    </button>
+
+    <button
+      type="submit"
+      class="badge badge-success mb-2"
+      (click)="updateTutorial()">
+      Güncelle
+    </button>
+    <p>{{ message }}</p>
+  </div>
+  } @else {<p>Bu kurs'a erişim yetkiniz yok!...</p>}
+}

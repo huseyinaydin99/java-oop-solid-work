@@ -1,0 +1,33 @@
+<div>
+  <div class="submit-form">
+    @if (!submitted) {
+    <div class="form-group">
+      <label for="title">Başlık</label>
+      <input
+        type="text"
+        class="form-control"
+        id="title"
+        required
+        [(ngModel)]="tutorial.title"
+        name="title"
+      />
+    </div>
+
+    <div class="form-group">
+      <label for="description">Açıklama</label>
+      <input
+        class="form-control"
+        id="description"
+        required
+        [(ngModel)]="tutorial.description"
+        name="description"
+      />
+    </div>
+
+    <button (click)="saveTutorial()" class="btn btn-success">Gönder</button>
+    } @else {
+    <h4>Kurs Gönderimi Başarılı</h4>
+    <button class="btn btn-success" (click)="newTutorial()">Ekle</button>
+    }
+  </div>
+</div>
