@@ -1,0 +1,86 @@
+<div class="col-md-12">
+  <div class="card card-container">
+    <img
+      id="profile-img"
+      src="//ssl.gstatic.com/accounts/ui/avatar_2x.png"
+      class="profile-img-card"
+    />
+    <form
+      *ngIf="!isSuccessful"
+      name="form"
+      (ngSubmit)="f.form.valid && onSubmit()"
+      #f="ngForm"
+      novalidate
+    >
+      <div class="form-group">
+        <label for="username">Kullanıcı Adı</label>
+        <input
+          type="text"
+          class="form-control"
+          name="username"
+          [(ngModel)]="form.username"
+          required
+          minlength="3"
+          maxlength="20"
+          #username="ngModel"
+        />
+        <div class="alert-danger" *ngIf="username.errors && f.submitted">
+          <div *ngIf="username.errors['required']">Kullanıcı Adı Zorunlu!</div>
+          <div *ngIf="username.errors['minlength']">
+            Kullanıcı adı en az 3 karakter olmalıdır!
+          </div>
+          <div *ngIf="username.errors['maxlength']">
+            Kullanıcı adı en fazla 20 karakter olmalıdır!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="email">E-posta Adresi</label>
+        <input
+          type="email"
+          class="form-control"
+          name="email"
+          [(ngModel)]="form.email"
+          required
+          email
+          #email="ngModel"
+        />
+        <div class="alert-danger" *ngIf="email.errors && f.submitted">
+          <div *ngIf="email.errors['required']">E-posta Adresi Gerekli!</div>
+          <div *ngIf="email.errors['email']">
+            E-posta geçerli bir e-posta adresi olmalıdır!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="password">Şifre</label>
+        <input
+          type="password"
+          class="form-control"
+          name="password"
+          [(ngModel)]="form.password"
+          required
+          minlength="6"
+          #password="ngModel"
+        />
+        <div class="alert-danger" *ngIf="password.errors && f.submitted">
+          <div *ngIf="password.errors['required']">Şifre gerekli!</div>
+          <div *ngIf="password.errors['minlength']">
+            Şifre en az 6 karakter olmalıdır!
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary btn-block">Kaydol</button>
+      </div>
+
+      <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+        Kayıt başarısız oldu!<br />{{ errorMessage }}
+      </div>
+    </form>
+
+    <div class="alert alert-success" *ngIf="isSuccessful">
+      Kaydınız başarılı!
+    </div>
+  </div>
+</div>
