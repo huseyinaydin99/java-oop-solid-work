@@ -4,7 +4,15 @@ import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.TreeSet;
+/*
 
+linkedhashset torba gibi değil rast gele erişim yok ekleme sırasını korur
+
+hashset normal olanı ekleme sırasını korumaz adeta torbadan erişim gibi rast gele gelir okunanlar
+
+treeset her seferinde asc desc gibi bir sıralamaya koyar bu işlem maliyetlidir null alamaz çünkü sıralama işleminde kıyaslama gerekiyor nesneleri nullpointerexception a neden olur.
+
+ */
 public class MySet {
     public static void main(String[] args) {
         System.out.println("--- HashSet rastgele -------------");
