@@ -29,7 +29,7 @@ public class MySet {
         studentList4.add("Hüseyin");
         studentList4.add("Bekir");
         studentList4.add("Fahrettin");
-        studentList4.add(null); // olur
+        studentList4.add(null); // sıralama işlemi olduğu için her seferinde null eklenemez
         studentList4.add("Ahmet");
         studentList4.add("Selami");
         studentList4.add("Halit");
