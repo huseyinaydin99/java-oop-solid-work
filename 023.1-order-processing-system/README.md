@@ -21,3 +21,31 @@ FixedThreadPool belirlenen sayıda thread ile çalışır 🧵 ve fazla gelen g�
 ### ❓ Thread Pool boyutu neye göre belirlenir?
 
 Thread Pool boyutu yapılan işin türüne göre belirlenir; CPU ağırlıklı işlemlerde genellikle işlemci çekirdek sayısı 🖥️ esas alınırken, I/O ağırlıklı işlemlerde bekleme süreleri fazla olduğu için daha yüksek thread sayıları tercih edilebilir. 🎯 Amaç, işlemciyi verimli kullanırken gereksiz thread oluşturmadan ⚡ maksimum performans ve kararlılık sağlamaktır.
+
+### 🚀 CompletableFuture Nedir?
+
+CompletableFuture, uzun süren işlemleri ana akışı bekletmeden 🧵 arka planda asenkron olarak çalıştırmaya ve sonuçlarını daha sonra yönetmeye yarayan güçlü bir Java API'sidir. ⚡ Birden fazla görevi aynı anda başlatabilir, sonuçlarını birleştirebilir 🤝, hata yönetimi yapabilir 🛡️ ve karmaşık iş akışlarını okunabilir, esnek ve performanslı şekilde oluşturmayı sağlar.
+
+### 🎯 CompletableFuture Neden Kullanılır?
+
+CompletableFuture, birbirinden bağımsız işlemleri aynı anda çalıştırarak ⏱️ toplam işlem süresini kısaltmak ve sistem kaynaklarını daha verimli kullanmak için tercih edilir. 🚀 Özellikle veritabanı, API, dosya sistemi veya ödeme işlemleri gibi bekleme süresi yüksek operasyonlarda ⚙️ uygulamanın daha hızlı, akıcı ve ölçeklenebilir çalışmasına katkı sağlar.
+
+### 🛠️ CompletableFuture Hangi Amaca Hizmet Eder?
+
+Temel amacı, bağımsız görevleri paralel şekilde çalıştırıp 🧩 sonuçlarını belirli bir sıraya göre yönetmek ve tüm süreci tek bir akış içerisinde kontrol edebilmektir. 📈 Böylece hem kod tekrarını azaltır ✨ hem de karmaşık asenkron işlemleri daha okunabilir, sürdürülebilir ve yönetilebilir hale getirir.
+
+### 🚨 CompletableFuture Hangi Soruna Çözüm Getirir?
+
+Uzun süren işlemlerin birbirini gereksiz yere beklemesi ⏳ ve uygulamanın zaman kaybetmesi problemini ortadan kaldırır. ⚡ Görevleri aynı anda çalıştırarak işlem süresini azaltır 🚀, sistem kaynaklarını daha verimli kullanır 💻 ve kullanıcıya daha hızlı yanıt verilmesini sağlar.
+
+### 🔄 Senkron (Synchronous) Nedir?
+
+Senkron çalışma modelinde her işlem, kendisinden önceki işlem tamamlanmadan başlayamaz ⛔ ve tüm görevler belirli bir sırayla ilerler. 📋 Bu yapı veri tutarlılığı açısından avantaj sağlarken, uzun süren işlemler nedeniyle uygulamanın beklemesine ve toplam işlem süresinin uzamasına neden olabilir. ⏱️
+
+### ⚡ Asenkron (Asynchronous) Nedir?
+
+Asenkron çalışma modelinde bir işlem başlatıldıktan sonra 🧵 uygulama onu beklemek zorunda kalmadan diğer işlere devam edebilir. 🚀 Bu yaklaşım özellikle birbirinden bağımsız görevlerin aynı anda yürütülmesini sağlayarak performansı artırır 📈 ve kaynakların daha verimli kullanılmasına yardımcı olur.
+
+### 🧵 Multi Threading Nedir?
+
+Multi Threading, bir uygulamanın birden fazla thread kullanarak aynı anda birden fazla işi yürütebilmesini sağlayan eşzamanlı programlama yaklaşımıdır. ⚙️ İşlemci kaynaklarının daha verimli kullanılmasını sağlar 💪, bağımsız görevlerin paralel çalışmasına olanak tanır 🚀 ve özellikle yüksek performans gerektiren uygulamalarda işlem süresini önemli ölçüde azaltır.
