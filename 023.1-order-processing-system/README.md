@@ -57,3 +57,19 @@ Race Condition, birden fazla thread'in aynı paylaşılan veriye aynı anda eri�
 ### 🔐 ReentrantLock Nedir, Ne Değildir?
 
 ReentrantLock, Java'nın java.util.concurrent.locks paketinde bulunan ve birden fazla thread'in paylaşılan bir kaynağa aynı anda erişmesini kontrol etmek için kullanılan açıkça yönetilen bir lock mekanizmasıdır. 🧵 Buradaki lock, kritik bölgeye aynı anda yalnızca bir thread'in girmesini sağlayarak Race Condition ⚠️ ve buna bağlı veri tutarsızlıklarını önler; thread kilidi aldığı sürece diğer thread'ler bekler, işini bitirdiğinde unlock() ile kilidi bırakır. 🔐 Reentrant olması ise aynı thread'in, sahip olduğu kilidi tekrar kilitleyebilmesini ifade eder; bu nedenle basit bir synchronized alternatifi olmakla birlikte tryLock(), adil kilitleme (fairness) ve interruptible locking gibi daha ayrıntılı kontrol seçenekleri sunar. 🎯 Ancak ReentrantLock bir thread oluşturma mekanizması, Thread Pool veya genel bir performans artırıcı değildir; temel amacı paylaşılan mutable state üzerindeki kritik bölgeye erişimi senkronize ederek concurrency kaynaklı veri yarışlarını kontrol etmektir.
+
+### 🛑 lockInterruptibly() Nasıl Çalışır?
+
+Thread-A işi aldığı için lock'ı alır ve çalışırken Thread-B aynı lock'ı almak için beklemek zorunda kalır. 🧵 Thread-B bu bekleme sırasında interrupt() alırsa, lockInterruptibly() sayesinde beklemeyi bırakıp InterruptedException ile akıştan çıkabilir; yani "lock'ı almak için bekle ama artık beklemeye gerek kalmadıysa bu işi bırak" mantığı uygulanır. ⚡ Buradaki interrupt() thread'i zorla kill etmez; thread'e iptal/beklemeyi bırak sinyali gönderir ve thread'in bu sinyale nasıl tepki vereceğini uygulama belirler. 🎯 Bu mekanizma özellikle uzun süre lock bekleyen görevlerin gerektiğinde iptal edilebilmesi ve kontrollü kapanış sırasında thread'lerin gereksiz yere kilit bekleyerek sistemde takılı kalmaması için kullanılır.
+
+### ⚖️ Fair ReentrantLock Nedir?
+
+new ReentrantLock(true) ile oluşturulan fair lock, kilidi bekleyen thread'lerin lock'a erişiminde mümkün olduğunca bekleme sırasını (FIFO) takip etmesini sağlar. 🧵 Örneğin Thread-A lock'ı kullanırken Thread-B, Thread-C ve Thread-D sıraya girdiyse, lock serbest kaldığında bu thread'lerin sırayı bozmadan ilerlemesi hedeflenir. ⚖️ Böylece bir thread'in sürekli lock'ı kapıp diğer thread'lerin uzun süre beklemesi (starvation) riski azaltılır, ancak bu adaletin sağlanması ek koordinasyon maliyeti getirdiği için performans bir miktar düşebilir. 🚦 Kısacası fair lock'ın amacı daha hızlı çalışmak değil, lock'a erişimde thread'ler arasında daha adil bir bekleme düzeni sağlamaktır.
+
+### ⚡ TryLockInventory Nasıl Çalışır?
+
+TryLockInventory, ReentrantLock kullanarak stok üzerinde işlem yaparken kilidi beklemek yerine kilidi o anda alıp alamadığını kontrol eden yapıdır. 🧵 Bir thread lock'ı almışsa diğer thread tryLock() çağrısında beklemeye geçmez, doğrudan false alarak işlemi bırakır; yani "kilit müsaitse gir, değilse bekleme" mantığı uygulanır. ⚡ Bu yaklaşım, özellikle lock'ın uzun süre meşgul olabileceği durumlarda thread'lerin boş yere beklemesini önleyerek sistemin daha esnek davranmasını sağlar. 🎯 Dolayısıyla TryLockInventory'nin amacı Race Condition'ı çözmekten ziyade, kilit alma sürecini bloklamayan ve başarısız kilit denemesinde alternatif karar verebilen bir kontrol mekanizması sağlamaktır.
+
+tryLock() kilidi alamazsa varsayılan olarak tekrar denemez, false döndürür ve senin kodun ne yapıyorsa onu yapar; bizim örnekte doğrudan return false ile işlem sonlanıyor. 🔄 Ama istersen while döngüsüyle tekrar deneyebilir, tryLock(2, TimeUnit.SECONDS) ile belirli bir süre bekleyebilir veya lock alınamazsa başka bir işlem yapabilirsin.
+
+Evet; eğer lock alınamadığında işlem doğrudan bırakılıyorsa, thread üstlenmesi gereken işi gerçekleştirmeden atlamış olur ve bu işin kritik olması durumunda uygulama açısından ciddi bir iş mantığı problemi doğabilir.
