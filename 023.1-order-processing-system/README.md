@@ -49,3 +49,7 @@ Asenkron çalışma modelinde bir işlem başlatıldıktan sonra 🧵 uygulama o
 ### 🧵 Multi Threading Nedir?
 
 Multi Threading, bir uygulamanın birden fazla thread kullanarak aynı anda birden fazla işi yürütebilmesini sağlayan eşzamanlı programlama yaklaşımıdır. ⚙️ İşlemci kaynaklarının daha verimli kullanılmasını sağlar 💪, bağımsız görevlerin paralel çalışmasına olanak tanır 🚀 ve özellikle yüksek performans gerektiren uygulamalarda işlem süresini önemli ölçüde azaltır.
+
+### 🏁 Race Condition Nedir, Ne Değildir?
+
+Race Condition, birden fazla thread'in aynı paylaşılan veriye aynı anda erişip, işlemlerin hangi sırayla gerçekleşeceğine bağlı olarak öngörülemeyen veya hatalı sonuçlar üretmesi durumudur. 🧵 Özellikle bir thread'in veriyi okuması ile güncellemesi arasındaki süreçte başka bir thread'in aynı veriye müdahale etmesi ⚠️ problemi doğurur; yani mesele yalnızca "iki thread'in aynı anda çalışması" değil, sonucun thread'lerin zamanlamasına ve erişim sırasına bağımlı hale gelmesidir. 🎯 Örneğin stok değeri 1 iken iki thread'in de aynı anda stock > 0 kontrolünü geçmesi, her ikisinin de ürünü satılmış kabul etmesine yol açabilir. 🛒 Race Condition bir exception değildir ❌, doğrudan bir thread hatası da değildir; paylaşılan mutable state üzerinde kontrolsüz eşzamanlı erişimden kaynaklanan bir concurrency problemidir. 🔥
