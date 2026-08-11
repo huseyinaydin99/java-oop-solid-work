@@ -117,3 +117,19 @@ Bir thread ortak değişkeni güncellediğinde, Java Memory Model bu değişikli
 
 ### ❓ Peki diğer thread güncellenen değeri neden hemen görmek zorunda değildir?
 Thread'ler performans amacıyla değerleri CPU cache veya register gibi yapılarda kullanabildiğinden, bir thread'in yaptığı değişikliğin diğer thread'in gördüğü değere hemen yansıması garanti edilmez. 🧠 Burada ayrıntılı olarak CPU'nun veya JVM'in ne yaptığına takılmak yerine, öğrenilmesi gereken temel kural şudur: volatile yoksa visibility garanti edilmez, volatile varsa visibility garanti edilir. 🔒
+
+### 🧵 Callable Nedir, Ne Değildir?
+
+Callable<T>, Java'da bir görevi başka bir thread üzerinde çalıştırırken sonuç döndürmek için kullanılan ve call() metoduyla tanımlanan bir functional interface'tir. 🎯 Runnable gibi doğrudan bir thread oluşturmaz veya işi kendisi çalıştırmaz; görevin tanımını ExecutorService gibi bir executor'a teslim eden bir abstraction'dır.
+
+### 🎯 Callable Ne İşe Yarar?
+
+Callable, asenkron veya paralel yürütülen bir işlemin sonucunu daha sonra Future<T> üzerinden alabilmeyi sağlar. ⏳ Ayrıca call() metodu checked exception fırlatabildiği için hata yönetimini görev seviyesinde ifade etmeyi kolaylaştırır.
+
+### 🛠️ Hangi Sorunlara Çözüm Getirir?
+
+Runnable ile yalnızca işi çalıştırıp sonucu doğrudan geri alamama problemini çözer; özellikle Thread Pool üzerinde çalışan hesaplama, sorgu veya işleme görevlerinin ürettiği değeri çağıran tarafa taşır. 📦 Bunun yanında Future ile birlikte sonucu bekleme, timeout uygulama, görevi iptal etme ve oluşan hatayı yakalama gibi kontrol imkanları sağlar.
+
+### ⚔️ Callable ile Runnable Arasındaki Fark Nedir?
+
+Runnable void döndürürken Callable<T> bir sonuç döndürür ve Runnable.run() checked exception fırlatamazken Callable.call() checked exception fırlatabilir. 🔄 Bu nedenle sonuç üretmeyen bağımsız işler için Runnable, bir değer üretip bu değerin daha sonra alınması gereken görevler için ise Callable tercih edilir.
