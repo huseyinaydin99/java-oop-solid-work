@@ -73,3 +73,10 @@ TryLockInventory, ReentrantLock kullanarak stok üzerinde işlem yaparken kilidi
 tryLock() kilidi alamazsa varsayılan olarak tekrar denemez, false döndürür ve senin kodun ne yapıyorsa onu yapar; bizim örnekte doğrudan return false ile işlem sonlanıyor. 🔄 Ama istersen while döngüsüyle tekrar deneyebilir, tryLock(2, TimeUnit.SECONDS) ile belirli bir süre bekleyebilir veya lock alınamazsa başka bir işlem yapabilirsin.
 
 Evet; eğer lock alınamadığında işlem doğrudan bırakılıyorsa, thread üstlenmesi gereken işi gerçekleştirmeden atlamış olur ve bu işin kritik olması durumunda uygulama açısından ciddi bir iş mantığı problemi doğabilir.
+
+### 🔐 ReentrantReadWriteLock Nedir?
+
+ReentrantReadWriteLock, Java'da aynı paylaşılan kaynağa okuma ve yazma erişimini birbirinden ayırarak kontrol eden bir lock mekanizmasıdır. 📖 Birden fazla thread aynı anda readLock() alıp veriyi okuyabilirken, writeLock() yalnızca tek bir thread'e verilir ve yazma sırasında hem diğer yazıcıların hem de okuyucuların erişimi engellenir. ⚙️ Böylece özellikle okuma işlemlerinin çok, yazma işlemlerinin az olduğu sistemlerde ReentrantLock'un tüm işlemleri tek tek kilitlemesinden kaynaklanan gereksiz beklemeler azaltılır. 🚀 Temel olarak çözdüğü problem, paylaşılan veriyi güvenli tutarken birbirini etkilemeyen okuma işlemlerini gereksiz yere seri hale getirmemektir; yani güvenlik ile eşzamanlılık arasında daha uygun bir denge kurar.
+
+ReentrantReadWriteLock ile birden fazla thread aynı anda okuma yapabilir 📖, ancak bir thread writeLock aldığında başka hiçbir thread yazma veya okuma işlemi gerçekleştiremez 🔒. Böylece yazma sırasında paylaşılan verinin değiştirilmesi engellenerek veri tutarlılığı korunur, okuma sırasında ise thread'lerin birbirini gereksiz yere beklemesi önlenir ⚡. 🎯 Dolayısıyla temel amaç, güvenli erişim ile paralel okuma performansını aynı anda sağlayarak hem veri bütünlüğünü korumak hem de gereksiz bekleme sürelerini azaltmaktır.
+
