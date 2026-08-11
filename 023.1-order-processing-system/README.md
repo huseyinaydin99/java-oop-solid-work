@@ -80,3 +80,20 @@ ReentrantReadWriteLock, Java'da aynı paylaşılan kaynağa okuma ve yazma eriş
 
 ReentrantReadWriteLock ile birden fazla thread aynı anda okuma yapabilir 📖, ancak bir thread writeLock aldığında başka hiçbir thread yazma veya okuma işlemi gerçekleştiremez 🔒. Böylece yazma sırasında paylaşılan verinin değiştirilmesi engellenerek veri tutarlılığı korunur, okuma sırasında ise thread'lerin birbirini gereksiz yere beklemesi önlenir ⚡. 🎯 Dolayısıyla temel amaç, güvenli erişim ile paralel okuma performansını aynı anda sağlayarak hem veri bütünlüğünü korumak hem de gereksiz bekleme sürelerini azaltmaktır.
 
+### ❓ Thread-1 lock'ı aldığında Thread-2 ve Thread-3, Thread-1 henüz işini tamamlamadıysa beklemede mi kalır?
+Evet; Thread-1 synchronized metodu çalıştırırken Thread-2 ve Thread-3 aynı nesnenin lock'ını almak için bekler, Thread-1 metodu bitirip lock'ı bıraktığında bekleyen thread'lerden biri lock'ı alarak devam eder. 🔒
+
+### ❓ Peki Thread-1 lock'ı bıraktığında Thread-2 mi yoksa Thread-3 mü önce lock'ı alır; sıralı mı, rastgele mi?
+Thread-1 lock'ı bıraktığında Thread-2 veya Thread-3'ten herhangi biri lock'ı alabilir; synchronized erişimde FIFO sırası garanti edilmediği için hangisinin önce çalışacağı kesin olarak belirlenmiş değildir. ⚡🧵
+
+### 🔐 synchronized Anahtar Kelimesi Nedir, Ne İşe Yarar?
+
+synchronized, Java'da birden fazla thread'in aynı paylaşılan kaynağa eşzamanlı erişimini kontrol ederek kritik bölgeyi aynı anda yalnızca bir thread'in çalıştırmasını sağlayan bir thread-safety mekanizmasıdır. 🧵 Bir thread synchronized metoda veya bloğa girdiğinde ilgili nesnenin monitor lock'ını alır 🔒 ve diğer thread'ler bu lock serbest bırakılana kadar bekler; böylece Race Condition, veri tutarsızlığı ve kontrolsüz ortak state güncellemeleri önlenir. ⚙️ Özellikle sayaç artırma, stok azaltma veya ortak bir nesnenin durumunu değiştirme gibi işlemlerde güvenli erişim sağlar; ancak synchronized bir Thread Pool, thread oluşturma mekanizması veya genel bir performans artırıcı değildir ❌, temel amacı paylaşılan mutable state üzerinde karşılıklı dışlamayı (mutual exclusion) ve aynı zamanda gerekli memory visibility garantilerini sağlayarak thread'ler arasındaki veri erişimini güvenli hale getirmektir. 🎯
+
+### 🔒 Monitor Lock Nedir?
+
+Monitor Lock, Java'da synchronized mekanizmasının arkasında çalışan ve aynı anda yalnızca bir thread'in belirli bir nesnenin kritik bölgesine girmesine izin veren kilit mekanizmasıdır. 🧵 Bir thread synchronized metoda girdiğinde o nesnenin monitor lock'ını alır 🔐, diğer thread'ler bekler ve ilk thread metottan çıktığında lock otomatik olarak serbest bırakılır; yani temel mantık "bir thread içerideyse diğerleri dışarıda bekler" şeklindedir.
+
+### 🚪 Monitor Lock Nedir?
+
+Monitor Lock mekanizmasını tek kişilik ve kilitli bir tuvalet gibi düşünebilirsin: 🚪 Tuvalete giren Thread-1 kapıyı kilitlediğinde 🔒 Thread-2 ve Thread-3 dışarıda bekler; Thread-1 işini bitirip kapıyı açtığında 🔓 bekleyen thread'lerden biri içeri girebilir. Java'daki synchronized da aynı mantıkla çalışır; aynı nesnenin monitor lock'ını elinde tutan thread kritik bölgedeyken diğer thread'ler o bölgeye giremez, böylece paylaşılan veriye aynı anda müdahale edilmesi engellenir. 🧵🎯
