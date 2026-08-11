@@ -90,6 +90,26 @@ public class ApplicationParallelStream {
         ForkJoinPool.commonPool() bu değerleri JVM'nin mevcut işlemci çekirdeği sayısını
         (availableProcessors()) temel alarak varsayılan şekilde otomatik belirler. ⚙️
         */
+
+        numbers.parallelStream()
+                .forEachOrdered(number ->
+                        System.out.println(
+                                Thread.currentThread().getName() +
+                                        " -> " + number
+                        )
+                );
+        /*
+        forEachOrdered(), paralel stream kullanılmasına rağmen stream'in encounter order'ını
+        koruyarak sonuçların sırayla tüketilmesini sağlar. 🔒 Ancak bu sıra garantisinin
+        bir maliyeti vardır; thread'lerin tamamen bağımsız ilerlemesini kısıtlayabildiği
+        için forEach() kadar paralel çalışma avantajı sağlayamayabilir.
+
+        Buradaki kritik ayrım paralel olup olmamaları değil, sonucu tüketirken sıra garantisinin
+        bulunup bulunmamasıdır; her iki işlem de parallelStream() üzerinden çalışabilir ancak
+        forEachOrdered() encounter order'ı korumak için ek koordinasyon gerektirir. ⚙️ Bu nedenle
+        sıralamanın önemli olmadığı durumlarda forEach(), sıralamanın mutlaka korunması
+        gerektiğinde ise forEachOrdered() tercih edilmelidir.
+         */
     }
 
 }
