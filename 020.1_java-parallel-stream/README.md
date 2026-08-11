@@ -20,3 +20,28 @@ Dolayısıyla parallelStream()'in asıl değeri "kodu paralel hâle getirmek" de
 En temel olarak, çok sayıdaki bağımsız veri üzerinde aynı CPU yoğun işlemin sırayla yapılması problemini hedefler; işi parçalara bölerek birden fazla çekirdeğin aynı anda çalışmasını mümkün kılar. 🔀 
 Örneğin 10 milyon bağımsız hesaplama tek thread tarafından arka arkaya yapıldığında CPU'nun diğer çekirdekleri büyük ölçüde kullanılmayabilir; parallelStream() ise uygun durumda bu hesaplamaları birden fazla worker thread'e dağıtarak işlem kapasitesini artırabilir.
 Ancak bu çözüm I/O bekleme, ağ çağrıları, veritabanı erişimi veya ortak mutable state gibi problemlerin genel çözümü değildir; çünkü paralellik burada darboğazı ortadan kaldırmak yerine çoğu zaman kaynak rekabetini ve sistem üzerindeki yükü artırabilir. ⚠️
+
+### ForkJoinPool'u doğrudan görelim
+
+```java
+ForkJoinPool commonPool = ForkJoinPool.commonPool();
+
+System.out.println("Parallelism: " + commonPool.getParallelism());
+System.out.println("Pool Size : " + commonPool.getPoolSize());
+```
+
+parallelStream() varsayılan olarak bu ortak ForkJoinPool altyapısından yararlanır ve pool içerisindeki worker thread'ler paralel stream görevlerini yürütür. ⚙️ getParallelism() değeri, pool'un hedeflediği worker paralellik seviyesini gösterirken getPoolSize() o anda pool tarafından oluşturulmuş worker thread sayısını gösterir.
+
+parallelStream(), varsayılan olarak ForkJoinPool.commonPool()'u kullanır ve stream'deki işleri bu pool'un worker(işçi) thread'lerine dağıtır. ⚙️
+
+#### getParallelism():
+>Pool'un aynı anda kaç worker thread ile çalışmayı hedeflediğini gösterir. 🔄
+
+#### getPoolSize():
+>Pool'un o anda oluşturmuş olduğu worker thread sayısını gösterir. 🔧
+
+#### Kısaca:
+>getParallelism() → "Kaç thread ile çalışmayı hedefliyor?"
+getPoolSize()    → "Şu anda kaç thread oluşturulmuş?"
+
+ForkJoinPool.commonPool() bu değerleri JVM'nin mevcut işlemci çekirdeği sayısını (availableProcessors()) temel alarak varsayılan şekilde otomatik belirler. ⚙️

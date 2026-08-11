@@ -1,6 +1,7 @@
 package tr.com.huseyinaydin.app;
 
 import java.util.List;
+import java.util.concurrent.ForkJoinPool;
 import java.util.stream.IntStream;
 
 /*
@@ -64,6 +65,31 @@ public class ApplicationParallelStream {
                                     " | " + Thread.currentThread().getName()
                     );
                 });
+
+        System.out.println("-------");
+
+        ForkJoinPool commonPool = ForkJoinPool.commonPool();
+
+        System.out.println("Parallelism: " + commonPool.getParallelism());
+        System.out.println("Pool Size : " + commonPool.getPoolSize());
+
+        /*
+        parallelStream(), varsayılan olarak ForkJoinPool.commonPool()'u kullanır
+        ve stream'deki işleri bu pool'un worker(işçi) thread'lerine dağıtır. ⚙️
+
+        getParallelism():
+        Pool'un aynı anda kaç worker thread ile çalışmayı hedeflediğini gösterir. 🔄
+
+        getPoolSize():
+        Pool'un o anda oluşturmuş olduğu worker thread sayısını gösterir. 🔧
+
+        Kısaca:
+        getParallelism() → "Kaç thread ile çalışmayı hedefliyor?"
+        getPoolSize()    → "Şu anda kaç thread oluşturulmuş?"
+
+        ForkJoinPool.commonPool() bu değerleri JVM'nin mevcut işlemci çekirdeği sayısını
+        (availableProcessors()) temel alarak varsayılan şekilde otomatik belirler. ⚙️
+        */
     }
 
 }
