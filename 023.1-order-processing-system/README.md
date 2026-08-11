@@ -97,3 +97,23 @@ Monitor Lock, Java'da synchronized mekanizmasının arkasında çalışan ve ayn
 ### 🚪 Monitor Lock Nedir?
 
 Monitor Lock mekanizmasını tek kişilik ve kilitli bir tuvalet gibi düşünebilirsin: 🚪 Tuvalete giren Thread-1 kapıyı kilitlediğinde 🔒 Thread-2 ve Thread-3 dışarıda bekler; Thread-1 işini bitirip kapıyı açtığında 🔓 bekleyen thread'lerden biri içeri girebilir. Java'daki synchronized da aynı mantıkla çalışır; aynı nesnenin monitor lock'ını elinde tutan thread kritik bölgedeyken diğer thread'ler o bölgeye giremez, böylece paylaşılan veriye aynı anda müdahale edilmesi engellenir. 🧵🎯
+
+### ❓ Thread'lerde Atomic Counter nedir ve ne işe yarar?
+⚛️ AtomicInteger gibi atomic counter'lar, birden fazla thread'in aynı sayaç üzerinde yaptığı increment, decrement ve benzeri güncellemelerin bölünemez (atomic) şekilde gerçekleşmesini sağlayarak Race Condition kaynaklı veri kaybını önler.
+
+### ❓ Atomic ve normal Counter arasındaki fark nedir?
+🔒 Normal int counter'da counter++ gibi işlemler birden fazla adımdan oluştuğu için thread'ler birbirlerinin güncellemelerini ezebilirken, atomic counter bu güncellemeleri thread-safe ve kayıpsız şekilde gerçekleştirir.
+
+### ❓ Bir işlemin Atomic olması ne demektir?
+⚛️ Atomic olması, bir işlemin başka bir thread tarafından arada bölünemeyecek şekilde tek bir işlem gibi gerçekleştirilmesi ve diğer thread'lerin işlemin tamamlanmasını beklemesi anlamına gelir.
+
+### ❓ Atomic olmayan Counter'da neden beklenen değer ile gerçek değer farklı çıkabilir?
+⚡ Örneğin 1000 artış beklenirken volatile int ile yapılan counter++ işlemleri birbirini ezebildiği için sonuç 975, 982 veya 991 gibi değişken ve garanti edilemeyen bir değer olabilir.
+
+## 🧠 volatile Olmadığında Thread Neden Eski Değeri Görebilir?
+
+### ❓ Neden bazen thread'ler güncellenen ortak değerin son halini değil, eski halini görür?
+Bir thread ortak değişkeni güncellediğinde, Java Memory Model bu değişikliğin diğer thread tarafından ne zaman görüleceğini volatile olmadan garanti etmez; bunun arkasında CPU cache, register ve compiler/CPU optimizasyonları gibi düşük seviyeli mekanizmalar bulunabilir. 🧵 volatile ise değişken için memory visibility garantisi sağlayarak bir thread'in yaptığı güncellemenin diğer thread'ler tarafından güncel haliyle görülmesini güvence altına alır. ⚡
+
+### ❓ Peki diğer thread güncellenen değeri neden hemen görmek zorunda değildir?
+Thread'ler performans amacıyla değerleri CPU cache veya register gibi yapılarda kullanabildiğinden, bir thread'in yaptığı değişikliğin diğer thread'in gördüğü değere hemen yansıması garanti edilmez. 🧠 Burada ayrıntılı olarak CPU'nun veya JVM'in ne yaptığına takılmak yerine, öğrenilmesi gereken temel kural şudur: volatile yoksa visibility garanti edilmez, volatile varsa visibility garanti edilir. 🔒
