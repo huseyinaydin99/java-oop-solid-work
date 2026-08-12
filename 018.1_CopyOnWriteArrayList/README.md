@@ -15,3 +15,27 @@ ArrayList mevcut backing array'i doğrudan değiştirirken, CopyOnWriteArrayList
 #### Ne işe yarar ve hangi soruna çözüm getirir?
 
 Başka thread'ler listeyi değiştirirken okuyucuların kilitleme olmadan güvenli ve tutarlı şekilde iterasyon yapmasını sağlar. 🧠 Böylece özellikle çok okuma + az yazma senaryolarında concurrent modification problemini snapshot izolasyonu ile çözer.
+
+#### 1 soru, önceden ekli 3 eleman olsun sonra başka işlemler yapılsın okuma veya herhangi bir iş, o iş bitsin, sonrasında ise ekleme yapılsın. Bu ekleme işleminde yeni kopyaya mı eklenir yoksa hali hazırda var olan array'e mi eklenir? Okuma anında değil ama. Okuma bitmiş sonlanmış. Sonrasında ekleniyor ama. 
+
+Okuma tamamen bittikten sonra ekleme yapılsa bile CopyOnWriteArrayList mevcut array'i değiştirmez; yine yeni bir array kopyası oluşturup elemanı bu yeni array'e ekler. 🔧
+
+#### Peki bir sonraki okumada hangi array okunur en son hali mi? 
+
+Evet, bir sonraki okuma en son oluşturulan ve eklenen elemanı içeren güncel array'i okur. 🔄
+
+#### Peki öncekile ne olur otomatik silinir mi? 
+
+Evet, eski array'e artık hiçbir referans kalmadığında Garbage Collector tarafından otomatik olarak temizlenebilir. ♻️
+
+#### Peki okuma işlemi yokken yeni kopya oluşturması ve eklemeyi oraya yapması saçma değil mi? Boşuna açmış oluyor en son hangi array varsa git ona yaz değil mi? Zaten okuma yok. 
+
+Hayır; çünkü CopyOnWriteArrayList okuma olup olmadığını kontrol etmez, her mutasyonda yeni array oluşturmak tasarımının temel garantisidir; okuma yokken bile mevcut array'e doğrudan yazmaz. 🔒
+
+#### Peki okuma olup olmadığını kontrol etseydi daha iyi olmaz mıydı? 
+
+Genellikle hayır; çünkü bunu kontrol etmek için ek senkronizasyon ve durum takibi gerekir, bu da basit ve lock-free okuma modelinin maliyetini artırarak tasarımın temel avantajını zayıflatır. ⚙️
+
+#### Peki güncelleme ve silme işlemleri de aynı mantıkta mıdır? 
+
+Evet, set, remove, add gibi tüm yapısal veya içerik değiştiren mutasyonlarda aynı Copy-on-Write mantığı uygulanır; yeni array oluşturulur ve değişiklik bu yeni array üzerinde gerçekleştirilir. 🔁
