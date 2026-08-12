@@ -39,3 +39,9 @@ Genellikle hayır; çünkü bunu kontrol etmek için ek senkronizasyon ve durum 
 #### Peki güncelleme ve silme işlemleri de aynı mantıkta mıdır? 
 
 Evet, set, remove, add gibi tüm yapısal veya içerik değiştiren mutasyonlarda aynı Copy-on-Write mantığı uygulanır; yeni array oluşturulur ve değişiklik bu yeni array üzerinde gerçekleştirilir. 🔁
+
+#### CopyOnWriteArrayList Iterator — Değişmez Snapshot Üzerinden Güvenli İterasyon 🧭
+
+Bu aşamada CopyOnWriteArrayList iterator'ının oluşturulduğu anda mevcut array'i snapshot olarak aldığını ve sonradan yapılan eklemelerin mevcut iterator'a yansımadığını gördük. 🔎 Ancak users.iterator() yeniden çağrıldığında yeni iterator güncel array'i snapshot aldığı için "Ayşe" gibi sonradan eklenen elemanları da görür; ayrıca snapshot değiştirilemediğinden iterator.remove() desteklenmez. 🧩
+
+İkinci iterator = users.iterator() sonrasında çağırdığım remove(), ikinci iterator'ın oluşturulduğu anda gördüğü güncel yani son array üzerinde çalışmaya çalışır; ancak iterator ilgili snapshot'ı(array'i) değiştiremediği için işlem UnsupportedOperationException ile kesilir. 🔒
