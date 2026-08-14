@@ -1,4 +1,4 @@
-package tr.com.huseyinaydin.app;
+package tr.com.huseyinaydin.memory;
 
 /*
     C++'da Pointer nedir? (Örnek olsun diye yazıyorum yoksa dersimiz zaten Java'dır).

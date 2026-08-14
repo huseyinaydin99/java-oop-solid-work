@@ -1,4 +1,4 @@
-package tr.com.huseyinaydin.app;
+package tr.com.huseyinaydin.gc;
 
 public class HeapLifecycleDemo {
 
