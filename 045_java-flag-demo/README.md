@@ -153,3 +153,33 @@ hatası oluşur. Fırlatılan şey: OutOfMemoryError bir Error’dır, bir Excep
 Farkı: Exception genellikle uygulamanın çalışma sırasında karşılaşabileceği ve ele alınabilecek durumları ifade ederken, Error JVM veya çalışma ortamının ciddi bir problem yaşadığını ve çoğunlukla uygulama tarafından kurtarılmasının beklenmediğini ifade eder.
 
 Burada gördüğümüz şey: -Xmx256m JVM'in Heap'ini 256 MB'dan fazla büyütmesine izin vermez; uygulama bundan daha fazla bellek istediğinde JVM OutOfMemoryError ile durumu bildirir.
+
+### -XX Flag’leri
+
+-XX flag'leri, JVM'in gelişmiş ve JVM'e özgü çalışma davranışlarını yapılandırmak için kullanılır.
+
+```java
+// sıradan Java kodu;
+public class Main {
+    public static void main(String[] args) {
+        System.out.println("Uygulama çalışıyor.");
+    }
+}
+```
+
+>IntelliJ IDEA → VM Options → -XX:+UseG1GC
+
+Buradaki: -XX: JVM'e özgü gelişmiş bir seçenek kullandığımızı belirtir.
+
++UseG1GC ise G1 Garbage Collector'ı etkinleştirir.
+
+```text
+-XX:+FlagName   → flag'i etkinleştir
+-XX:-FlagName   → flag'i devre dışı bırak
+
+Değer alan -XX flag'leri de vardır:
+-XX:MaxGCPauseMillis=200
+Bu ise JVM'e GC için hedeflenen maksimum duraklama süresini 200 ms olarak ayarla demektir.
+```
+
+>Özet: -Xmx256m gibi -X seçenekleri temel JVM ayarlarında kullanılırken, -XX seçenekleri GC, JIT ve JVM'in diğer iç çalışma mekanizmalarını daha ayrıntılı biçimde yapılandırmak için kullanılır.
