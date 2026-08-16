@@ -116,3 +116,40 @@ Kullanılabilir Heap: 328 MB
 Maksimum Heap: 512 MB
 --------------------
 ```
+
+### Heap için max Sınırın Aşılması OutOfMemoryException;
+
+```java
+public class HeapOutOfMemory {
+    public static void main(String[] args) {
+
+        List<byte[]> memory = new ArrayList<>();
+
+        while (true) {
+            memory.add(new byte[10 * 1024 * 1024]); // 10 MB her seferinde - sonsuza kadar - heap taşar max sınır aşılır - outofmemory fırlatılır
+
+            System.out.println("10 MB bellek tahsis edildi.");
+        }
+    }
+}
+```
+
+IntelliJ IDEA → VM Options -Xms128m -Xmx256m ver sonra çalıştır
+
+Program her döngüde 10 MB yeni bellek ister:
+
+```text
+10 MB bellek tahsis edildi.
+10 MB bellek tahsis edildi.
+10 MB bellek tahsis edildi.
+...
+```
+
+Heap 256 MB sınırına yaklaştığında artık yeni nesneler için yeterli alan kalmaz ve sonunda:
+
+java.lang.OutOfMemoryError: Java heap space 
+
+hatası oluşur. Fırlatılan şey: OutOfMemoryError bir Error’dır, bir Exception değildir.
+Farkı: Exception genellikle uygulamanın çalışma sırasında karşılaşabileceği ve ele alınabilecek durumları ifade ederken, Error JVM veya çalışma ortamının ciddi bir problem yaşadığını ve çoğunlukla uygulama tarafından kurtarılmasının beklenmediğini ifade eder.
+
+Burada gördüğümüz şey: -Xmx256m JVM'in Heap'ini 256 MB'dan fazla büyütmesine izin vermez; uygulama bundan daha fazla bellek istediğinde JVM OutOfMemoryError ile durumu bildirir.
