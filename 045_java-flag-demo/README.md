@@ -44,3 +44,33 @@ public class Main {
 IntelliJ IDEA’da Run → Edit Configurations → çalıştırdığın uygulamayı seç → Modify options → Add VM options kısmından ekle:
 
 -Xmx256m
+
+### Max Min Heap Ayarlama;
+
+```java
+public class MinMaxHeap {
+    public static void main(String[] args) {
+        Runtime runtime = Runtime.getRuntime();
+        // MB cinsine dönüştürme formülü
+        long totalMemory = runtime.totalMemory() / (1024 * 1024); // şu an ki total
+        long maxMemory = runtime.maxMemory() / (1024 * 1024); // ulaşılabilecek en fazla heap alanı
+
+        System.out.println("Heap başlangıç: " + totalMemory + " MB");
+        System.out.println("Heap maksimum: " + maxMemory + " MB");
+    }
+}
+```
+
+IntelliJ IDEA → VM options Run → Edit Configurations → VM options:
+
+-Xms128m -Xmx512m
+
+#### Örneğin:
+
+Heap başlangıç: 128 MB
+Heap maksimum: 512 MB
+
+> -Xms128m → JVM'in başlangıç Heap boyutunu belirler.
+-Xmx512m → JVM'in çıkabileceği maksimum Heap boyutunu belirler.
+
+-Xms128m başlangıç Heap boyutunu 128 MB olarak belirler, -Xmx512m ise Heap’in ihtiyaç halinde büyüyebileceği üst sınırı 512 MB olarak belirler.
