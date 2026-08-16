@@ -74,3 +74,45 @@ Heap maksimum: 512 MB
 -Xmx512m → JVM'in çıkabileceği maksimum Heap boyutunu belirler.
 
 -Xms128m başlangıç Heap boyutunu 128 MB olarak belirler, -Xmx512m ise Heap’in ihtiyaç halinde büyüyebileceği üst sınırı 512 MB olarak belirler.
+
+### Heap Gözlemi;
+
+```java
+public class MemoryMonitor {
+
+    public static void main(String[] args) {
+
+        Runtime runtime = Runtime.getRuntime();
+
+        printHeap(runtime);
+
+        byte[] data = new byte[200 * 1024 * 1024]; // 200 MB lık Heap alanı maşaAllah!
+
+        printHeap(runtime);
+    }
+
+    private static void printHeap(Runtime runtime) {
+
+        long total = runtime.totalMemory() / (1024 * 1024); // MB formülü var
+        long max = runtime.maxMemory() / (1024 * 1024);
+
+        System.out.println("Kullanılabilir Heap: " + total + " MB");
+        System.out.println("Maksimum Heap: " + max + " MB");
+        System.out.println("--------------------");
+    }
+}
+```
+
+> IntelliJ IDEA → VM Options; -Xms128m -Xmx512m
+
+### Gözlemci;
+
+```text
+/Library/Java/JavaVirtualMachines/jdk-17.jdk/Contents/Home/bin/java -Xms128m -Xmx512m -javaagent:/Applications/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=49805 -Dfile.encoding=UTF-8 -classpath /Users/huseyinaydin99/Desktop/Projects/java-oop-solid-work/045_java-flag-demo/target/classes tr.com.huseyinaydin.minmaxheap.MemoryMonitor
+Kullanılabilir Heap: 130 MB
+Maksimum Heap: 512 MB
+--------------------
+Kullanılabilir Heap: 328 MB
+Maksimum Heap: 512 MB
+--------------------
+```
