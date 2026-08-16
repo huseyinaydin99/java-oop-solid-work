@@ -183,3 +183,31 @@ Bu ise JVM'e GC için hedeflenen maksimum duraklama süresini 200 ms olarak ayar
 ```
 
 >Özet: -Xmx256m gibi -X seçenekleri temel JVM ayarlarında kullanılırken, -XX seçenekleri GC, JIT ve JVM'in diğer iç çalışma mekanizmalarını daha ayrıntılı biçimde yapılandırmak için kullanılır.
+
+### -X Flag’leri
+
+-X flag'leri JVM'in temel bellek alanlarını yapılandırmak için kullanılır.
+
+```text
+-Xms128m → Heap başlangıç en az alan: 128 MB
+-Xmx512m → Heap maksimum en fazla alan: 512 MB
+-Xss256k → Her thread için Stack alanı: 256 KB
+```
+
+```java
+// Stack alanını dolduralım daşıralım
+public class Main {
+    public static void main(String[] args) {
+        recursiveMethod();
+    }
+    
+    static void recursiveMethod() {
+        recursiveMethod();
+    }
+}
+
+// recursiveMethod() kendisini sürekli çağırdığı için her çağrıda Stack'te yeni bir stack frame oluşur, dolayısıyla taşar.
+// Bir süre sonra Stack dolacak ve: java.lang.StackOverflowError göreceğiz.
+```
+
+> Yani: -Xss256k ile thread Stack'ini küçülttük ve Stack'in sınırına ulaştığımızda JVM'in StackOverflowError verdiğini doğrudan gözlemledik.
