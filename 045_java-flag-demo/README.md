@@ -211,3 +211,45 @@ public class Main {
 ```
 
 > Yani: -Xss256k ile thread Stack'ini küçülttük ve Stack'in sınırına ulaştığımızda JVM'in StackOverflowError verdiğini doğrudan gözlemledik.
+
+### GC Flag’leri
+
+Garbage Collector’ın hangi algoritmayı kullanacağını JVM flag’i ile belirleyebiliriz.
+
+#### G1 GC
+-XX:+UseG1GC
+
+> JVM'e G1 Garbage Collector'ı kullan der.
+
+### ZGC
+-XX:+UseZGC
+
+> JVM'e ZGC kullan der.
+
+### Shenandoah
+-XX:+UseShenandoahGC
+
+> JVM'e Shenandoah kullan der.
+
+### IntelliJ IDEA
+
+Run → Edit Configurations → VM options:
+```text
+-Xmx512m
+-XX:+UseG1GC
+```
+
+>Burada -Xmx512m Heap sınırını, -XX:+UseG1GC ise Heap'i temizleyecek Garbage Collector'ı belirler.
+
+>Kısacası: -XX:+UseG1GC, -XX:+UseZGC veya -XX:+UseShenandoahGC gibi flag'ler JVM'e “bellek temizliğini hangi GC algoritmasıyla yapacağını” söyler.
+
+### İlgili GC'ler Nedir?
+
+### G1 GC: 
+Heap’i bölgelere ayırarak çöp toplama işini kontrollü biçimde yapar ve özellikle büyük Heap’lerde duraklama sürelerini dengede tutmayı hedefler.
+
+### ZGC:
+Garbage Collection işleminin büyük bölümünü uygulama çalışırken eşzamanlı yaparak çok düşük duraklama sürelerini hedefler.
+
+### Shenandoah:
+Nesneleri taşıma ve belleği düzenleme işlerini uygulamayla büyük ölçüde eşzamanlı yürütüp uzun GC duraklamalarını azaltmayı hedefler.
