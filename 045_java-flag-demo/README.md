@@ -325,3 +325,49 @@ Normal	✅ Açık	45 ms
 
 Buradaki deneyin amacı: Aynı kodu değiştirmeden yalnızca JVM flag'ini değiştirerek JIT'in performans üzerindeki gerçek etkisini ölçmek. Ciddi fark var!
 ```
+
+### Pratik Senaryolar;
+
+Şimdi tek bir senaryoda Heap, GC ve JIT için doğru flag’i seçelim.
+
+Senaryo
+
+Uygulama çalışıyor ama:
+
+Heap yetersiz kalıyor.
+GC duraklamaları fazla.
+Hesaplama yapan kodlar yavaş çalışıyor.
+
+#### 1. Heap problemi
+Heap sınırını artır:
+
+-Xms256m
+-Xmx1g
+
+-Xmx1g → JVM'in Heap'i en fazla 1 GB olabilir.
+
+#### 2. GC problemi
+G1 kullan:
+
+-XX:+UseG1GC
+
+G1, Heap'i yönetirken GC duraklamalarını daha kontrollü tutmayı hedefler.
+
+#### 3. JIT problemi
+JIT derlemelerini gözlemle:
+
+-XX:+PrintCompilation
+
+JIT'i kapatma:
+
+-Xint
+
+çünkü -Xint, JIT optimizasyonlarını devre dışı bırakarak genellikle performansı düşürür.
+
+#### 4. Hepsini birlikte
+   -Xms256m
+   -Xmx1g
+   -XX:+UseG1GC
+   -XX:+PrintCompilation
+
+Mantık: Bellek sorunu → -Xms / -Xmx, GC davranışı → -XX:+UseG1GC, JIT'i inceleme → -XX:+PrintCompilation; yani problemi önce belirleyip ona karşılık gelen flag'i seçiyoruz.
