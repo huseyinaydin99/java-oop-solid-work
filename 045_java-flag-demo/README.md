@@ -293,3 +293,35 @@ Kısacası: -Xint JIT'i kapatıp farkı görmemizi, -XX:+PrintCompilation ise JI
 Evet, çünkü -Xint ile JIT'i tamamen kapattın; dolayısıyla -XX:+PrintCompilation yazdıracak bir JIT derlemesi gerçekleşmiyor.
 ```
 
+### Nükleer Deneyler;
+
+```text
+Deney 1 — Normal JVM
+
+VM Options:
+
+-Xms128m -Xmx512m
+
+Çalıştır ve süreyi kaydet:
+
+Süre: 45 ms
+
+--
+
+Deney 2 — JIT kapalı
+
+VM Options:
+
+-Xms128m -Xmx512m -Xint
+
+Tekrar çalıştır:
+
+Süre: 320 ms
+
+Karşılaştır
+Çalışma	JIT	Süre
+Normal	✅ Açık	45 ms
+-Xint	❌ Kapalı	320 ms
+
+Buradaki deneyin amacı: Aynı kodu değiştirmeden yalnızca JVM flag'ini değiştirerek JIT'in performans üzerindeki gerçek etkisini ölçmek. Ciddi fark var!
+```
