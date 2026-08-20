@@ -253,3 +253,43 @@ Garbage Collection işleminin büyük bölümünü uygulama çalışırken eşza
 
 ### Shenandoah:
 Nesneleri taşıma ve belleği düzenleme işlerini uygulamayla büyük ölçüde eşzamanlı yürütüp uzun GC duraklamalarını azaltmayı hedefler.
+
+### JIT Flag’leri
+
+JIT (Just-In-Time) derleyicisi, sık çalışan Java kodlarını çalışma sırasında optimize ederek makine koduna dönüştürür; -XX flag’leriyle JIT'in davranışını gözlemleyebiliriz.
+
+```text
+JIT'i kapatalım
+
+IntelliJ IDEA → Run → Edit Configurations → VM options:
+
+-Xint
+
+-Xint, JVM'i yalnızca yorumlayarak çalıştırmaya zorlar ve JIT derlemesini devre dışı bırakır.
+
+2. JIT'i açalım
+
+Normal çalıştırmada:
+
+java Main
+
+JVM JIT'i kullanabilir.
+
+3. JIT derlemelerini görelim
+-XX:+PrintCompilation
+
+ile çalıştırdığımızda JVM'in derlediği metotları konsolda görebiliriz:
+
+100   42       3       Main::calculate (25 bytes)
+
+Buradaki Main::calculate, JIT tarafından derlenen metottur.
+
+Kısacası: -Xint JIT'i kapatıp farkı görmemizi, -XX:+PrintCompilation ise JIT'in hangi metotları derlediğini gözlemlememizi sağlar.
+
+--
+
+-Xint -XX:+PrintCompilation ekledim ancak console'a basmadı!
+
+Evet, çünkü -Xint ile JIT'i tamamen kapattın; dolayısıyla -XX:+PrintCompilation yazdıracak bir JIT derlemesi gerçekleşmiyor.
+```
+
