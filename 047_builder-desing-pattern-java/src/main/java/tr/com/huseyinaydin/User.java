@@ -16,8 +16,6 @@ public class User {
         this.active = builder.active;
     }
 
-
-
     public static Builder builder() {
         return new Builder();
     }

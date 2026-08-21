@@ -84,3 +84,38 @@ Parametre sayısı arttıkça bu yaklaşımın okunabilirliği düşer ve özell
 
 Kısaca:
 🏗️ Builder = Karmaşık nesneleri adım adım, okunabilir ve esnek biçimde oluşturmak için vardır.
+
+---
+
+Lombok ile aynı Builder yapısını ciddi biçimde sadeleştirebiliriz; Builder Pattern'in mantığı değişmez, sadece Builder sınıfını ve tekrar eden kodu Lombok bizim için üretir.
+
+### 🧱 Lombok ile Builder
+import lombok.Builder;
+import lombok.Getter;
+
+
+@Getter
+@Builder
+public class User {
+
+
+    private final String username;
+    private final String email;
+    private final String phone;
+    private final String address;
+    @Builder.Default
+    private final boolean active = true;
+}
+
+@Builder, User.builder() yapısını ve gerekli builder metotlarını otomatik üretirken @Getter erişim metotlarını oluşturur. @Builder.Default ise active alanına değer verilmediğinde true değerinin korunmasını sağlar; böylece aynı Builder Pattern'i çok daha az boilerplate kodla uyguladım.
+
+🚀 Kullanımı
+User user = User.builder()
+.username("huseyin")
+.email("huseyin@example.com")
+.phone("5551234567")
+.address("Niğde")
+.active(true)
+.build();
+
+Burada nesneyi oluştururken hangi alanın hangi değeri aldığını doğrudan gördüğümüz için kod daha okunabilir ve bakımı daha kolaydır. Lombok, Builder Pattern'in karmaşık nesneleri adım adım ve okunabilir biçimde oluşturma amacını korurken tekrar eden kodları ortadan kaldırdı.
