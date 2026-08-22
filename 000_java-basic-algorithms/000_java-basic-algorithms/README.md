@@ -392,3 +392,178 @@ public class QuickSort {
 ### Quick Sort'un asıl fikri: 
 
 Her seferinde bir pivotu doğru konumuna yerleştirip problemi daha küçük iki probleme bölmektir. Bu nedenle algoritmanın merkezindeki kavram partition işlemidir; onu anlarsak Quick Sort'un büyük kısmını anlamış oluruz.
+
+---
+### Merge Sort;
+
+Merge Sort'un mantığı aslında “böl → sırala → birleştir” şeklindedir. En önemli nokta, diziyi küçük parçalara bölüp bu parçaları sıralı şekilde tekrar birleştirmesidir.
+
+Şu dizimiz olsun:
+
+```text 
+[8, 3, 5, 4, 7, 6, 1, 2]
+```
+
+Önce ortadan ikiye böleriz:
+
+```text 
+[8, 3, 5, 4]    [7, 6, 1, 2]
+```
+
+Sonra tekrar böleriz:
+
+```text
+[8, 3] [5, 4]    [7, 6] [1, 2]
+```
+
+Tek elemana kadar devam eder:
+
+```text
+[8] [3] [5] [4] [7] [6] [1] [2]
+```
+
+Tek elemanlı diziler zaten sıralıdır.
+
+Şimdi asıl olay: Birleştirme
+
+```text
+[8] ve [3] elimizde.
+```
+
+İlk elemanları karşılaştırırız:
+
+```text
+8 > 3
+```
+
+Küçük olanı alırız:
+
+```
+[3, 8]
+```
+
+Sonra:
+
+```text
+[5] + [4] → [4, 5]
+[7] + [6] → [6, 7]
+[1] + [2] → [1, 2]
+```
+
+Artık elimizde:
+
+```
+[3, 8] [4, 5]    [6, 7] [1, 2]
+```
+
+Bunları da aynı mantıkla birleştiririz.
+
+Örneğin:
+
+```text
+[3, 8] + [4, 5]
+```
+
+Karşılaştırmalar:
+
+```text
+3 < 4  → 3
+8 > 4  → 4
+8 > 5  → 5
+```
+
+Sonuç:
+
+```text
+[3, 4, 5, 8]
+```
+
+Diğer taraf:
+
+```text
+[6, 7] + [1, 2]
+→ [1, 2, 6, 7]
+```
+
+Son birleştirme:
+
+```text
+[3, 4, 5, 8]
++
+[1, 2, 6, 7]
+↓
+[1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+Java'da karşılığı
+
+```java
+public class MergeSort {
+
+    public static void mergeSort(int[] array) {
+        if (array.length < 2) {
+            return;
+        }
+
+        int mid = array.length / 2;
+
+        int[] left = new int[mid];
+        int[] right = new int[array.length - mid];
+
+        System.arraycopy(array, 0, left, 0, mid);
+        System.arraycopy(array, mid, right, 0, right.length);
+
+        mergeSort(left);
+        mergeSort(right);
+
+        merge(array, left, right);
+    }
+
+    private static void merge(int[] array, int[] left, int[] right) {
+        int i = 0;
+        int j = 0;
+        int k = 0;
+
+        while (i < left.length && j < right.length) {
+            if (left[i] <= right[j]) {
+                array[k++] = left[i++];
+            } else {
+                array[k++] = right[j++];
+            }
+        }
+
+        while (i < left.length) {
+            array[k++] = left[i++];
+        }
+
+        while (j < right.length) {
+            array[k++] = right[j++];
+        }
+    }
+}
+```
+
+Kodun zihindeki karşılığı
+
+```text
+mergeSort()
+        ↓
+diziyi ikiye böl
+        ↓
+sol tarafı tekrar böl
+        ↓
+sağ tarafı tekrar böl
+        ↓
+tek elemanlara ulaş
+        ↓
+merge()
+        ↓
+küçük elemanı seçerek birleştir
+        ↓
+sıralı dizi
+
+```
+
+Kilit nokta: mergeSort() diziyi böler, merge() ise parçaları sıralı biçimde birleştirir.
+
+Bu yüzden Merge Sort'u anlamanın en önemli kısmı merge() metodundaki “iki sıralı dizinin başındaki elemanları karşılaştırıp küçüğü sonuca koyma” mantığını kavramaktır.
