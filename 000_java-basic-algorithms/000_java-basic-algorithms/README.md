@@ -163,3 +163,232 @@ public class _001_Avarage_Max_Min_Find {
     }
 }
 ```
+
+---
+
+### Sıralama Algoritmaları;
+
+#### Quick Sort;
+
+Quick Sort’u anlamanın en kolay yolu, pivot seçip diziyi pivotun etrafında ikiye ayırmak ve aynı işlemi alt dizilerde tekrarlamaktır.
+
+#### Pivot Nedir? 
+
+Pivot, Quick Sort’ta diziyi **küçük ve büyük elemanlar olarak ikiye ayırmak için referans alınan elemandır.
+
+#### Pivot Neye Göre Belirlenir?
+
+Pivotu biz belirleriz; en yaygın yöntemlerden biri dizinin ilkini, sonuncusunu veya ortadaki elemanını pivot olarak seçmektir.
+Teknik olarak herhangi bir elemanı seçebiliririz, ama seçilen pivotun konumu performansı etkiler; iyi pivot bölmeyi dengeler, kötü pivot algoritmayı yavaşlatır.
+
+##### Şu diziyi sıralayalım:
+
+```java
+int[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
+```
+
+İlk olarak bir pivot seçelim. En sağdaki elemanı seçelim:
+
+```text
+[7, 2, 1, 6, 8, 5, 3, 4]
+                      ↑
+                    pivot
+                      4
+```
+
+Amacımız: pivot'tan küçükler | pivot | pivot'tan büyükler şeklinde ikiye ayırmaktır.
+
+##### 1. Partition
+
+4 pivot olduğuna göre 4'ten küçük değerleri sol tarafa, büyükleri sağ tarafa taşırız.
+
+Sonuç örneğin şöyle olabilir:
+
+```text
+[2, 1, 3] [4] [7, 6, 8, 5]
+           ↑
+         pivot
+```
+
+Burada önemli nokta şu:
+
+4 artık doğru konumundadır.
+
+Çünkü solunda 4'ten küçük, sağında 4'ten büyük elemanlar vardır.
+
+Quick Sort bundan sonra 4 ile ilgilenmez.
+
+##### 2. Sol tarafı tekrar Quick Sort yap
+
+```text
+[2, 1, 3]
+```
+
+Pivot yine son eleman olsun:
+
+```text
+[2, 1, 3]
+       ↑
+     pivot
+```
+
+Partition sonucunda:
+
+```text
+[2, 1] [3]
+```
+
+Sonra [2, 1] üzerinde tekrar çalışırız:
+
+```text
+[2, 1]
+↑
+pivot
+```
+
+Sonuç:
+
+```text
+[1, 2]
+```
+
+Dolayısıyla sol taraf:
+
+```text
+[1, 2, 3]
+```
+
+olur.
+
+#### 3. Sağ tarafı da aynı şekilde yap
+
+Başlangıçta sağ tarafımız:
+
+```text
+[7, 6, 8, 5]
+
+Pivot:
+
+[7, 6, 8, 5]
+          ↑
+        pivot
+          5
+```
+
+Partition:
+
+```text
+[ ] [5] [7, 6, 8]
+↑
+
+Sonra [7, 6, 8]:
+
+[7, 6, 8]
+↑
+pivot
+```
+
+Partition:
+
+```text
+[7, 6] [8]
+
+[7, 6] de sıralanır:
+
+[6, 7]
+```
+
+Sonuç:
+
+```text
+[5, 6, 7, 8]
+```
+Sonuç
+
+İlk partition'dan sonra elimizde:
+
+```text
+[2, 1, 3] [4] [7, 6, 8, 5]
+```
+
+vardı.
+
+Alt diziler de sıralanınca:
+
+```text
+[1, 2, 3] [4] [5, 6, 7, 8]
+```
+
+ve nihayet:
+
+```text
+[1, 2, 3, 4, 5, 6, 7, 8]
+```
+
+olur. Böyle bir mantık işliyor.
+
+```java
+public class QuickSort {
+
+    static void main() {
+        int[] numbers = {7, 2, 1, 6, 8, 5, 3, 4};
+
+        quickSort(numbers, 0, numbers.length - 1);
+    }
+
+    public static void quickSort(int[] numbers, int low, int high) {
+
+        if (low < high) {
+
+            int pivotIndex = partition(numbers, low, high);
+
+            quickSort(numbers, low, pivotIndex - 1);
+            quickSort(numbers, pivotIndex + 1, high);
+        }
+    }
+
+    private static int partition(int[] numbers, int low, int high) {
+
+        int pivot = numbers[high];
+        int i = low - 1;
+
+        for (int j = low; j < high; j++) {
+
+            if (numbers[j] <= pivot) {
+                i++;
+
+                int temp = numbers[i];
+                numbers[i] = numbers[j];
+                numbers[j] = temp;
+            }
+        }
+
+        int temp = numbers[i + 1];
+        numbers[i + 1] = numbers[high];
+        numbers[high] = temp;
+
+        return i + 1;
+    }
+}
+```
+
+#### Quick Sort Modeli;
+```text
+                 QUICK SORT
+                     │
+                 pivot seç
+                     │
+              partition yap
+               /          \
+        küçükler          büyükler
+            │                 │
+    tekrar QS başa sar.  tekrar QS başa sar. recursive metot
+            │                 │
+            └────────┬────────┘
+                     │
+                   sıralı
+```
+
+### Quick Sort'un asıl fikri: 
+
+Her seferinde bir pivotu doğru konumuna yerleştirip problemi daha küçük iki probleme bölmektir. Bu nedenle algoritmanın merkezindeki kavram partition işlemidir; onu anlarsak Quick Sort'un büyük kısmını anlamış oluruz.
