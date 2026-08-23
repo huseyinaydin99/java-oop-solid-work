@@ -567,3 +567,185 @@ sıralı dizi
 Kilit nokta: mergeSort() diziyi böler, merge() ise parçaları sıralı biçimde birleştirir.
 
 Bu yüzden Merge Sort'u anlamanın en önemli kısmı merge() metodundaki “iki sıralı dizinin başındaki elemanları karşılaştırıp küçüğü sonuca koyma” mantığını kavramaktır.
+
+---
+
+#### Heap Sort
+
+Heap Sort'u anlamanın en kolay yolu şu fikri kavramaktır:
+
+Diziyi bir Max Heap'e dönüştürüyorum. En büyük eleman köke geliyor, sonra kökteki elemanı dizinin sonuna atıp Heap'i tekrar düzenliyorum.
+
+Önce dizideki en büyük elemanı bulup başa getiriyorum. Sonra onu dizinin sonuna koyuyorum. Böylece en büyük elemanın yeri kesinleşiyor. Kalan elemanlarda aynı işlemi tekrar ediyorum.
+
+Örneğimiz:
+
+```text
+[4, 10, 3, 5, 1]
+```
+
+1. Diziyi Max Heap'e dönüştür
+
+Max Heap'te her parent(anaç), çocuklarından büyük veya eşit olmalıdır.
+
+```text
+        10
+       /  \
+      5    3
+     / \
+    4   1
+```
+
+Dizi karşılığı:
+
+[10, 5, 3, 4, 1]
+
+Burada kritik nokta: En büyük eleman olan 10 artık kökte.
+
+2. En büyüğü sona taşı
+
+Kökteki 10 ile dizinin son elemanı 1 yer değiştirir:
+
+```text
+[1, 5, 3, 4, 10]
+```
+
+10 artık doğru yerinde. Bundan sonra 10'a dokunmuyoruz.
+
+Fakat Heap bozuldu:
+
+```text
+        1
+       / \
+      5   3
+     /
+    4
+```
+
+Bu yüzden Heap'i tekrar düzenliyoruz.
+
+```text
+[5, 4, 3, 1, 10]
+```
+
+##### 3. Tekrar en büyüğü sona taşı(10 hariç diğerlerini kast ediyorum)
+
+Şimdi Heap'in kökü 5:
+
+```text
+[5, 4, 3, 1, 10]
+```
+
+5 ile Heap'in son aktif elemanı(10 hariç) 1 yer değiştirir yani sona taşınır:
+
+```text
+[1, 4, 3, 5, 10]
+```
+
+Sonra Heap tekrar düzenlenir:
+
+```text
+[4, 1, 3, 5, 10]
+```
+
+Artık 5 ve 10 yerlerinde.
+
+4. Aynı işlemi tekrarla
+
+```text
+[4, 1, 3, 5, 10]
+```
+
+4 sona:
+
+```text
+[3, 1, 4, 5, 10]
+```
+
+Sonra:
+
+```text
+[1, 3, 4, 5, 10]
+```
+
+Bir kez daha:
+
+```text
+[3, 1, 4, 5, 10]
+→
+[1, 3, 4, 5, 10]
+```
+
+Sonuç:
+
+```text
+[1, 3, 4, 5, 10]
+```
+
+Mantığın tamamı
+
+```text
+Başlangıç dizisi
+      ↓
+En büyük elemanı en başa getir
+      ↓
+En büyük eleman artık kökte
+      ↓
+Kökteki en büyük elemanı dizinin sonuna taşı
+      ↓
+Kalan elemanlar arasından en büyüğü tekrar en başa getir
+      ↓
+Onu da dizinin sonuna taşı
+      ↓
+Aynı işlemi kalan elemanlar bitene kadar tekrarla
+      ↓
+Sıralanmış dizi
+```
+
+Java'da temel yapı
+
+```java
+public static void heapSort(int[] arr) {
+    int n = arr.length;
+
+    // Max Heap oluştur
+    for (int i = n / 2 - 1; i >= 0; i--) {
+        heapify(arr, n, i);
+    }
+
+    // En büyükleri tek tek sona taşı
+    for (int i = n - 1; i > 0; i--) {
+        int temp = arr[0];
+        arr[0] = arr[i];
+        arr[i] = temp;
+
+        heapify(arr, i, 0);
+    }
+}
+
+private static void heapify(int[] arr, int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && arr[left] > arr[largest]) {
+        largest = left;
+    }
+
+    if (right < n && arr[right] > arr[largest]) {
+        largest = right;
+    }
+
+    if (largest != i) {
+        int temp = arr[i];
+        arr[i] = arr[largest];
+        arr[largest] = temp;
+
+        heapify(arr, n, largest);
+    }
+}
+```
+
+Buradaki heapify, bozulan Heap düzenini tekrar kuran işlemdir.
+
+Özetle: Heap Sort'ta asıl olay sıralama değil, Max Heap'i kullanarak en büyük elemanı sürekli kökten alıp dizinin sonuna yerleştirmektir. Ortalama ve en kötü durumda zaman karmaşıklığı O(n log n), ek alan karmaşıklığı ise O(1)'dir.
