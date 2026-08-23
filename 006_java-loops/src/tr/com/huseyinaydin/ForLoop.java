@@ -67,5 +67,16 @@ public class ForLoop { // Sınıfın kendi kapsamı veya kapsama alanı
 
         // Bu koda asla gidilemez cunku ustte sonsuz dongu var.
         // int a = 100;
+
+
+
+        /* Java’da for döngüsünde i++ ile ++i arasında pratikte bir fark yoktur, çünkü artışın sonucu
+         döngünün gövdesinde kullanılmıyorsa ikisi de i değerini 1 artırıp bir sonraki iterasyona geçer.
+        */
+
+        // ++i kullansak da aynı çıktıyı verir i++ kullansakta. Bir fark yok!
+        for (int i = 0; i < 5; ++i) {
+            System.out.println(i);
+        }
     }
 }

@@ -13,3 +13,22 @@ Java’da döngüler 🔁, tekrarlayan işlemleri otomatikleştirerek kodu sade,
 🔹 ForEach döngüsü: Koleksiyon veya dizilerdeki her öğeye tek tek erişir; temiz, okunabilir ve hata olasılığı düşük bir yapı sunar 🧩.
 🔹 Sonsuz while döngüsü: Koşulu her zaman true olduğu için durmaksızın çalışır 🔄; genellikle sürekli izleme, servis dinleme veya kullanıcıdan çıkış bekleyen sistemlerde kullanılır ⚠️.
 ```
+
+##### Note;
+
+Java’da for döngüsünde i++ ile ++i arasında pratikte bir fark yoktur, çünkü artışın sonucu döngünün gövdesinde kullanılmıyorsa ikisi de i değerini 1 artırıp bir sonraki iterasyona geçer.
+
+```java
+for (int i = 0; i < 5; i++) {
+    System.out.println(i);
+}
+```
+
+// ++i kullansak da aynı çıktıyı verir:
+```java
+for (int i = 0; i < 5; ++i) {
+    System.out.println(i);
+}
+```
+
+Anlamı: i++ önce mevcut değeri kullanıp sonra artırır, ++i ise önce artırıp sonra değeri kullanır; ancak for döngüsünün artış bölümünde bu üretilen değer kullanılmadığı için sonuç değişmez. Asıl fark, int x = i++ ve int x = ++i gibi bir ifadenin içinde ortaya çıkar: ilki x'e eski değeri, ikincisi yeni değeri verir.
