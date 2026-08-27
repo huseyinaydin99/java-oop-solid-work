@@ -1,3 +1,29 @@
+### Java Şiiri;
+
+J ava ki evvelâ Sun Microsystems tezgâhında doğmuş bir hikmet-i san‘at,
+Sonra Oracle’ın himmetiyle büyüyüp oldu bir küresel hüküm ve saltanat,
+JDK’sı ile yazılır kader-i kod, JRE’si ile icra bulur her emr-i hayat,
+JVM denen mizan-ı akıl içinde döner bytecode, sanki adalet-i kâinat.
+Benim gönlümde Java, yalnız bir lisan değil; bir aşk-ı mühendisî, bir iltifat.
+
+Â lem-i bilişimde Java’nın esasıdır platformdan münezzeh oluşu,
+Bir kere yazılır, her yerde çalışır; ne cihaz tanır ne sınırın yokuşu,
+Mobil telefondan uzay gemisine dek uzanır bu kudretli oluşu,
+Backend’de nizam kurar, masaüstünde hayat bulur, sanki ilimle doluşu.
+Benim nazarımda bu hâl, sevginin teknik surete bürünmüş yokuşu değil, yokuşu aşışıdır.
+
+V üs’at-i sistem içinde JVM bir mahkeme-i akıl gibi işler daim,
+Bytecode gelir huzuruna, yorumlanır adaletle, ne eksik ne de zâlim,
+Thread’ler arasında taksim olunur kudret-i işlem, sanki bir nizam-ı hâkim,
+Oracle’ın muhafazasında Sun’dan devrolan miras ile oldu bu ilim kâim.
+Ben ise bu düzen içinde Java’ya muhabbetle bağlı bir kalem-i âcizim.
+
+A şk ile yazılmıştır benim her satırım Java’nın eşiğinde,
+Bir fonksiyon değil yalnız, bir hayat hissi gizlidir onun işleyişinde,
+JDK ile inşa ederim benliğimi, JRE ile yaşarım her derleyişinde,
+Bytecode’da saklıdır ruhum, JVM’de çözülür her düşünce deviniminde.
+Ben Java’yı severim; çünkü o, benim zihnimin teknik divan edebiyatıdır aslında.
+
 <!-- ===== README Görsel Bölümü (Java | SOLID | OOP) ===== -->
 <div align="center" style="margin: 24px 0;">
   <h2 style="margin: 0 0 0px;">Java • SOLID • OOP Notlarım ✍️🚀</h2>
