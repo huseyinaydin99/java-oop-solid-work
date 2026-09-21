@@ -3,9 +3,11 @@ package tr.com.huseyinaydin.presentation;
 import com.sun.net.httpserver.HttpServer;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import tr.com.huseyinaydin.application.port.in.TransferMoneyUseCase;
 import tr.com.huseyinaydin.application.port.out.AccountRepository;
 import tr.com.huseyinaydin.application.service.TransferMoneyService;
 import tr.com.huseyinaydin.domain.entity.Account;
+import tr.com.huseyinaydin.infrastructure.decorator.LoggingTransferMoneyUseCaseDecorator;
 import tr.com.huseyinaydin.infrastructure.persistence.AccountJpaEntity;
 import tr.com.huseyinaydin.infrastructure.persistence.HibernateAccountRepository;
 
@@ -27,7 +29,8 @@ public class Main {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         
         AccountRepository accountRepository = new HibernateAccountRepository(sessionFactory);
-        TransferMoneyService transferMoneyService = new TransferMoneyService(accountRepository);
+        TransferMoneyUseCase transferMoneyService = new TransferMoneyService(accountRepository);
+        TransferMoneyUseCase loggingDecorator = new LoggingTransferMoneyUseCaseDecorator(transferMoneyService);
 
         UUID account1Id = UUID.fromString("11111111-1111-1111-1111-111111111111");
         UUID account2Id = UUID.fromString("22222222-2222-2222-2222-222222222222");
@@ -36,7 +39,7 @@ public class Main {
         accountRepository.save(new Account(account2Id, new BigDecimal("500")));
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/api/transfer", new TransferHandler(transferMoneyService));
+        server.createContext("/api/transfer", new TransferHandler(loggingDecorator));
         server.setExecutor(null);
         server.start();
     }

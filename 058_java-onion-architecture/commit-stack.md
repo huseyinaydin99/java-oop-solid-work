@@ -82,3 +82,23 @@ Az önce harika bir mimari hamle yaptım; projenin altyapısındaki o saf JDBC k
 3. Sunumu (Composition Root) Yeni Veritabanıyla Tanıştırdım: Son olarak, tüm parçaları birleştirdiğim Main sınıfına gidip eski JDBC bağlantı ayarlarını kaldırdım ve yerine Hibernate'in konfigürasyonlarını (SessionFactory) yazdım. Sisteme "Artık veritabanı işlemlerinde JdbcAccountRepository değil, HibernateAccountRepository kullanacaksın" dedim. Geri kalan hiçbir koda, ne REST API'ye ne de Transfer servisine dokunmadım.
 
 Özetle: Saniyeler içinde sistemin bütün veritabanı motorunu ve mantığını baştan aşağı değiştirdim; ancak merkezdeki iş kurallarımın tek bir karakteri bile bozulmadı, etkilenmedi. SOLID prensiplerinin (özellikle Single Responsibility ve Dependency Inversion) sistemlere nasıl bir ölümsüzlük ve esneklik kattığını bir kez daha kendi gözlerimle kanıtladım!
+
+---
+
+"Gelişime açık, değişime kapalı" (Open-Closed) prensibinin yazılım dünyasında ne kadar büyüleyici bir güce sahip olduğunu göstermek için harika bir operasyon gerçekleştirdim. Sistemimizde kusursuzca çalışan para transferi iş mantığını (TransferMoneyService) zerre kadar değiştirmeden, ona dışarıdan yepyeni bir özellik (Loglama yeteneği) kazandırdım.
+
+#### İşte bu mimari zaferin anatomisi:
+
+#### 1. Sınırları Zorlayan Bir Zırh (Decorator) İnşa Ettim: 
+
+Altyapı (Infrastructure) katmanında LoggingTransferMoneyUseCaseDecorator adında yeni bir sınıf yarattım. Bu sınıf, aslında uygulamanın (Application) beklediği TransferMoneyUseCase arayüzünü uyguluyor. Yani dışarıdan bakıldığında tıpkı bizim asıl para transferi servisimiz gibi görünüyor. Ancak asıl işi kendisi yapmıyor; sadece işlem başlamadan önce ve bittikten sonra log (kayıt) tutuyor, asıl kritik para transferi görevini ise sarmaladığı (içine aldığı) gerçek servise devrediyor.
+
+#### 2. Parçaları Ana Merkezde (Composition Root) Yeniden Bağladım: 
+
+Ardından Main sınıfına gidip, web sunucusunun (REST API) önüne doğrudan gerçek servisi koymak yerine, bu yeni yazdığım loglayıcı "Decorator" nesnesini yerleştirdim. Gerçek servisi de bir matruşka bebek gibi bu nesnenin içine gizledim. REST API artık önce loglayıcıya çarpıyor, loglayıcı kayıt tutuyor ve sonra çekirdekteki asıl servisi tetikliyor.
+
+#### Bu hamleyle ne kazandık? 
+
+Eğer mevcut TransferMoneyService sınıfının içine girip her satıra logger.info() yazsaydık, hem iş kurallarımızı altyapısal kodlarla kirletmiş olacak hem de "Single Responsibility" (Tek Sorumluluk) prensibini fena halde ezecektik. Dahası, çalışan ve testleri geçmiş bir çekirdek kodu değiştirerek sistemde bug (hata) yaratma riski alacaktık.
+
+>Ancak Decorator (Dekoratör) deseni sayesinde, merkezdeki kodun tek bir karakterine bile dokunmadan sisteme muazzam bir yetenek (cross-cutting concern) sarmaladım. Çekirdek kodumuzun "Değişime tamamen kapalı (Closed), ancak yeni yetenekler kazanmaya sonuna kadar açık (Open)" olduğunu kanıtladım. Onion mimarisinin bize sunduğu bu eşsiz yalıtım, yıllarca ayakta kalacak sürdürülebilir bir projenin en büyük anahtarıdır!
