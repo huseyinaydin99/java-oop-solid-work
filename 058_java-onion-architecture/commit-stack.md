@@ -68,3 +68,17 @@ Son olarak Main sınıfını, tüm bu mimarinin birbiriyle tanışıp el sıkı�
 #### Özetle; 
 
 Projenin kalbini zerre kadar sarsmadan ve iş kurallarını bozmadan, hem veri saklama teknolojisini hem de kullanıcı iletişim arayüzünü sıfırdan değiştirdim. SOLID prensiplerinin (özellikle Bağımlılıkları Tersine Çevirme - Dependency Inversion) ve Onion mimarisinin sistemin ömrünü nasıl uzattığını, esnekliğini ve sürdürülebilirliğini bizzat kanıtlamış oldum!
+
+---
+
+Az önce harika bir mimari hamle yaptım; projenin altyapısındaki o saf JDBC kodları yerine devasa bir ORM aracı olan Hibernate'i yerleştirdim.
+
+#### İşte bu değişimin arkasındaki derin anlam ve anatomisi:
+
+1. Çekirdeği Zehirlemekten Kaçındım (JPA Entity İzolasyonu): Hibernate veya Spring Data gibi güçlü araçları kullanırken yapılan en büyük mimari hata, veritabanı tablolarını işaret eden @Entity veya @Table gibi anotasyonları merkeze (Domain katmanına) kadar sokmaktır. Ben bunu yapmadım! İş kurallarımı barındıran saf Account sınıfımı tertemiz bıraktım. Bunun yerine, sadece ve sadece altyapı (Infrastructure) katmanında yaşayacak, tamamen Hibernate'e özel AccountJpaEntity adında kopyası gibi davranan yeni bir sınıf yarattım. Merkezdeki beynim, Hibernate diye bir teknolojinin varlığından zerre kadar haberdar olmadı.
+
+2. Sınır Kapısındaki Çevirmen (HibernateAccountRepository): Uygulamanın (Application) bizden beklediği AccountRepository arayüzünü bu kez Hibernate ile implemente ettim. Bu sınıfı adeta bir sınır kapısı ve çevirmen gibi kullandım; merkezden gelen saf Account nesnelerini alıp, veritabanına kaydetmeden saniyeler önce Hibernate'in anladığı AccountJpaEntity'ye dönüştürdüm. Veritabanından okurken de tam tersini yaptım. Sistem sınırlarını kusursuzca korudum.
+
+3. Sunumu (Composition Root) Yeni Veritabanıyla Tanıştırdım: Son olarak, tüm parçaları birleştirdiğim Main sınıfına gidip eski JDBC bağlantı ayarlarını kaldırdım ve yerine Hibernate'in konfigürasyonlarını (SessionFactory) yazdım. Sisteme "Artık veritabanı işlemlerinde JdbcAccountRepository değil, HibernateAccountRepository kullanacaksın" dedim. Geri kalan hiçbir koda, ne REST API'ye ne de Transfer servisine dokunmadım.
+
+Özetle: Saniyeler içinde sistemin bütün veritabanı motorunu ve mantığını baştan aşağı değiştirdim; ancak merkezdeki iş kurallarımın tek bir karakteri bile bozulmadı, etkilenmedi. SOLID prensiplerinin (özellikle Single Responsibility ve Dependency Inversion) sistemlere nasıl bir ölümsüzlük ve esneklik kattığını bir kez daha kendi gözlerimle kanıtladım!
