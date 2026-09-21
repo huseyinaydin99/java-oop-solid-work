@@ -1,1 +1,5 @@
 /.idea/
+/application/target/
+/domain/target/
+/infrastructure/target/
+/presentation/target/

@@ -35,3 +35,14 @@ Tüm modüller için standart Maven Java dizin yapıları (src/main/java/com/hus
 4. Sunum (Presentation Katmanı / Dış Dünya) En dış katmanda ise Main sınıfıyla projenin ayağa kalktığı yeri (Composition Root) yazdım. Mimarimin tüm parçalarını burada birbiriyle tanıştırdım. Altyapıdan gelen somut veritabanı nesnemi, uygulama katmanından gelen servisin içine burada enjekte ettim. Örnek iki hesap oluşturup aralarında transfer işlemini gerçekleştirdim.
 
 Özetle; iş kurallarımı tamamen merkeze, özgür ve güvende olacak şekilde yerleştirdim. Teknolojiler eskiyip değişse de, gereksinimler büyüse de iç içe geçmeden (spagetti olmadan) ayakta kalacak, sürdürülebilir ve test edilebilir bir yazılımın ruhunu kodlara yansıttım. Proje dizininde kodları incelediğinde, karmaşadan uzak, birbirine saygı duyan ve sınırlarını kesin olarak bilen sınıflar göreceksin!
+
+---
+
+#### Testleri neden yaptım? 
+Mimarimin kalbini oluşturan iş kurallarını güvence altına almak için dış dünyadan ve altyapıdan tamamen bağımsız, saf birim testleri (unit test) yazdım. Bunu yaptım çünkü veritabanı, sunucu veya herhangi bir framework'e ihtiyaç duymadan, kurduğum para transferi mantığının tek başına ve kusursuz çalıştığını kendi gözlerimle kanıtlamak istedim.
+
+#### Neden teste ihtiyaç duydum? 
+Yazılımın asıl değerini taşıyan kritik kuralların (bakiye kontrolü, para transferi), zamanla proje büyüdükçe veya yeni kodlar eklendikçe asla bozulmayacağından emin olmak zorundaydım. Bu testleri yazarak kodumu gelecekteki krizlere karşı çelikten bir zırhla kapladım ve aynı zamanda sistemin nasıl davranması gerektiğini kelimelerle değil, kodla anlatan en dürüst dokümantasyonu oluşturmuş oldum.
+
+#### Neden sadece application(uygulama) ve domain(çekirdek) katmanında test yazdım? 
+Onion mimarisinin felsefesi gereği dış katmanlar (veritabanı, arayüz) yalnızca kolayca değiştirilebilir birer detaydır; projenin gerçek beyni ve değişmez değeri her zaman merkezdeki iş kurallarında yatar. Gelip geçici altyapı teknolojilerini test etmekle vakit kaybetmek yerine, doğrudan sistemin ruhunu garanti altına aldım; çünkü merkezdeki beyin doğru kararlar veriyorsa, onun emrine vereceğim herhangi bir veritabanı zaten kusursuz işleyecektir.
