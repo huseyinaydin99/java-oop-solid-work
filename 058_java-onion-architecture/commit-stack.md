@@ -46,3 +46,25 @@ Yazılımın asıl değerini taşıyan kritik kuralların (bakiye kontrolü, par
 
 #### Neden sadece application(uygulama) ve domain(çekirdek) katmanında test yazdım? 
 Onion mimarisinin felsefesi gereği dış katmanlar (veritabanı, arayüz) yalnızca kolayca değiştirilebilir birer detaydır; projenin gerçek beyni ve değişmez değeri her zaman merkezdeki iş kurallarında yatar. Gelip geçici altyapı teknolojilerini test etmekle vakit kaybetmek yerine, doğrudan sistemin ruhunu garanti altına aldım; çünkü merkezdeki beyin doğru kararlar veriyorsa, onun emrine vereceğim herhangi bir veritabanı zaten kusursuz işleyecektir.
+
+---
+
+İşte mimarimizin o meşhur "Tak-Çıkar" (Plug & Play) gücünü canlı canlı kanıtlamak için kolları sıvadığım aşama! Merkezdeki (Domain ve Application) tek bir satır koda bile dokunmadan, sadece en dış katmanlarda devasa teknoloji değişiklikleri yaptım. Kodların saflığını bozmamak adına yine tek bir açıklama satırı bile eklemedim.
+
+### İşte sistemi gerçek dünyayla nasıl buluşturduğumun detayları:
+
+#### 1. Altyapıyı (Infrastructure) Gerçek Bir Veritabanına Bağladım: 
+
+Testler için kullandığım bellekteki sahte veritabanını bir kenara bırakıp, yerine gerçek bir SQL veritabanı (H2 Database) bağladım. Merkezdeki beynin ihtiyaç duyduğu o AccountRepository arayüzünü, bu kez JdbcAccountRepository sınıfıyla implemente ettim. İçerisine saf JDBC ile SQL sorgularını yazdım. En güzel yanı ne biliyor musun? Merkezdeki iş kurallarım, verilerin artık bellekte değil, gerçek bir ilişkisel veritabanında saklandığını hissetmedi bile!
+
+#### 2. Sunumu (Presentation) Web'e Açtım:
+
+Para transferi işlemini konsola hapsolmaktan kurtardım. Ağır framework'ler (Spring vb.) kullanıp projeyi hantallaştırmak yerine, saf Java'nın HttpServer yeteneğiyle hafif bir REST API ayağa kaldırdım. Dışarıdan gelecek JSON isteklerini karşılayıp işleyecek olan TransferHandler sınıfını inşa ettim. Bu sunum sınıfı sadece dış dünyadan isteği alıyor ve merkezimizdeki o kusursuz TransferMoneyUseCase senaryomuza iletiyor.
+
+#### 3. Parçaları Birleştirdim (Composition Root): 
+
+Son olarak Main sınıfını, tüm bu mimarinin birbiriyle tanışıp el sıkıştığı yer olarak yeniden yapılandırdım. Veritabanı bağlantısını açtım, somut Repository nesnemi oluşturup Application servisime enjekte ettim ve web sunucumu 8080 portunda ayağa kaldırdım. İçerisine test için başlangıç bakiyeleri olan iki örnek hesap da ekledim.
+
+#### Özetle; 
+
+Projenin kalbini zerre kadar sarsmadan ve iş kurallarını bozmadan, hem veri saklama teknolojisini hem de kullanıcı iletişim arayüzünü sıfırdan değiştirdim. SOLID prensiplerinin (özellikle Bağımlılıkları Tersine Çevirme - Dependency Inversion) ve Onion mimarisinin sistemin ömrünü nasıl uzattığını, esnekliğini ve sürdürülebilirliğini bizzat kanıtlamış oldum!
