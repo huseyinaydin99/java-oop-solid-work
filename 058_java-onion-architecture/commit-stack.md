@@ -102,3 +102,27 @@ Ardından Main sınıfına gidip, web sunucusunun (REST API) önüne doğrudan g
 Eğer mevcut TransferMoneyService sınıfının içine girip her satıra logger.info() yazsaydık, hem iş kurallarımızı altyapısal kodlarla kirletmiş olacak hem de "Single Responsibility" (Tek Sorumluluk) prensibini fena halde ezecektik. Dahası, çalışan ve testleri geçmiş bir çekirdek kodu değiştirerek sistemde bug (hata) yaratma riski alacaktık.
 
 >Ancak Decorator (Dekoratör) deseni sayesinde, merkezdeki kodun tek bir karakterine bile dokunmadan sisteme muazzam bir yetenek (cross-cutting concern) sarmaladım. Çekirdek kodumuzun "Değişime tamamen kapalı (Closed), ancak yeni yetenekler kazanmaya sonuna kadar açık (Open)" olduğunu kanıtladım. Onion mimarisinin bize sunduğu bu eşsiz yalıtım, yıllarca ayakta kalacak sürdürülebilir bir projenin en büyük anahtarıdır!
+
+---
+
+Yazılım mimarisindeki en büyük krizlerden biri, "cross-cutting concerns" dediğimiz loglama, güvenlik, transaction ve hata yönetimi gibi altyapısal görevlerin, saf iş kurallarının arasına bir virüs gibi sızmasıdır. İşte bu krizi, merkezdeki TransferMoneyService sınıfının tek bir harfini bile değiştirmeden, sınıfları adeta bir Rus matruşka bebeği gibi iç içe geçirdiğim Decorator (Dekoratör) tasarımıyla tamamen ortadan kaldırdım!
+
+#### Peki neleri, nasıl sarmaladım?
+
+#### 1. Veritabanı Bütünlüğü (Transaction Management): 
+
+Öncelikle Uygulama (Application) katmanında bir TransactionManager arayüzü tanımlayıp, altyapıda bunu Hibernate ile hayata geçirdim. Ardından TransactionalTransferMoneyUseCaseDecorator sınıfını inşa ettim. Bu sınıf, asıl servisimizi içine aldı; para transferi öncesinde veritabanı işlemini başlattı, asıl işlem başarılıysa verileri "commit"ledi (kalıcı hale getirdi), hata alırsak "rollback" (geri alma) yaptı. Artık merkez servisimiz veritabanı bütünlüğünden tamamen habersizce işini yapabiliyor!
+
+#### 2. Güvenlik (Security) ve Tekrarlayan İstek Kontrolü (Caching/Idempotency): 
+
+Kritik bir finansal işlemi korumak adına SecurityTransferMoneyUseCaseDecorator yazdım; sistem güvenlik açısından kilitliyse (LOCKED) isteği içeriye hiç sokmadan kapıdan çevirdim. Ardından aynı isteğin peş peşe defalarca işlenmesini (duplicate) engellemek için CachingTransferMoneyUseCaseDecorator yazarak, bellek tabanlı bir kontrol (idempotency) mekanizması ekledim.
+
+#### 3. Hata Yönetimi (Exception Handling): 
+
+En dıştaki kalkan olarak ExceptionHandlingTransferMoneyUseCaseDecorator sınıfını ördüm. İç katmanlarda patlayan karmaşık ve anlamsız teknik hataları burada yakalayıp, dış dünyaya (REST API) sadece anlaşılır, temiz ve güvenli mesajlar sızmasını sağladım.
+
+#### 4. Büyük Birleşim (Composition Root): 
+
+Son olarak sunum katmanındaki Main sınıfına gidip tüm bu dekoratörleri soğanın cücüğünden kabuğuna doğru birbirinin içine yerleştirdim: En içte saf iş kurallarımız, onun üstünde transaction, sonra cache, güvenlik, loglama ve en dışta hata yönetimi!
+
+>İşte bu sayede SOLID'in "Tek Sorumluluk" (Single Responsibility) ve "Gelişime Açık, Değişime Kapalı" (Open-Closed) prensiplerini sonuna kadar yaşattım. İş mantığını hiçbir teknolojik detayla kirletmeden, mimarinin etrafına aşılmaz ve esnek bir altyapı zırhı ördüm!

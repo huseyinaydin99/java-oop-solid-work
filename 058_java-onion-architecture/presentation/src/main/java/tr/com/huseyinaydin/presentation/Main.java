@@ -5,11 +5,13 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import tr.com.huseyinaydin.application.port.in.TransferMoneyUseCase;
 import tr.com.huseyinaydin.application.port.out.AccountRepository;
+import tr.com.huseyinaydin.application.port.out.TransactionManager;
 import tr.com.huseyinaydin.application.service.TransferMoneyService;
 import tr.com.huseyinaydin.domain.entity.Account;
-import tr.com.huseyinaydin.infrastructure.decorator.LoggingTransferMoneyUseCaseDecorator;
+import tr.com.huseyinaydin.infrastructure.decorator.*;
 import tr.com.huseyinaydin.infrastructure.persistence.AccountJpaEntity;
 import tr.com.huseyinaydin.infrastructure.persistence.HibernateAccountRepository;
+import tr.com.huseyinaydin.infrastructure.persistence.HibernateTransactionManager;
 
 import java.math.BigDecimal;
 import java.net.InetSocketAddress;
@@ -24,22 +26,34 @@ public class Main {
         configuration.setProperty("hibernate.connection.driver_class", "org.h2.Driver");
         configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
         configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+        configuration.setProperty("hibernate.current_session_context_class", "thread");
         configuration.addAnnotatedClass(AccountJpaEntity.class);
 
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         
         AccountRepository accountRepository = new HibernateAccountRepository(sessionFactory);
+        TransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
+
         TransferMoneyUseCase transferMoneyService = new TransferMoneyService(accountRepository);
-        TransferMoneyUseCase loggingDecorator = new LoggingTransferMoneyUseCaseDecorator(transferMoneyService);
+        
+        TransferMoneyUseCase transactionalDecorator = new TransactionalTransferMoneyUseCaseDecorator(transferMoneyService, transactionManager);
+        TransferMoneyUseCase cachingDecorator = new CachingTransferMoneyUseCaseDecorator(transactionalDecorator);
+        TransferMoneyUseCase securityDecorator = new SecurityTransferMoneyUseCaseDecorator(cachingDecorator);
+        TransferMoneyUseCase loggingDecorator = new LoggingTransferMoneyUseCaseDecorator(securityDecorator);
+        TransferMoneyUseCase exceptionHandlingDecorator = new ExceptionHandlingTransferMoneyUseCaseDecorator(loggingDecorator);
 
         UUID account1Id = UUID.fromString("11111111-1111-1111-1111-111111111111");
         UUID account2Id = UUID.fromString("22222222-2222-2222-2222-222222222222");
-        
-        accountRepository.save(new Account(account1Id, new BigDecimal("1000")));
-        accountRepository.save(new Account(account2Id, new BigDecimal("500")));
+
+        try (org.hibernate.Session session = sessionFactory.getCurrentSession()) {
+            session.beginTransaction();
+            accountRepository.save(new Account(account1Id, new BigDecimal("1000")));
+            accountRepository.save(new Account(account2Id, new BigDecimal("500")));
+            session.getTransaction().commit();
+        }
 
         HttpServer server = HttpServer.create(new InetSocketAddress(8080), 0);
-        server.createContext("/api/transfer", new TransferHandler(loggingDecorator));
+        server.createContext("/api/transfer", new TransferHandler(exceptionHandlingDecorator));
         server.setExecutor(null);
         server.start();
     }
