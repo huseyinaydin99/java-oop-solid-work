@@ -1,10 +1,13 @@
 package tr.com.huseyinaydin.domain.entity;
 
 import tr.com.huseyinaydin.domain.exception.InsufficientBalanceException;
+import tr.com.huseyinaydin.domain.event.MoneyDepositedEvent;
+import tr.com.huseyinaydin.domain.event.MoneyWithdrawnEvent;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class Account {
+public class Account extends AggregateRoot {
     private final UUID id;
     private BigDecimal balance;
 
@@ -35,6 +38,7 @@ public class Account {
             throw new InsufficientBalanceException();
         }
         this.balance = this.balance.subtract(amount);
+        registerEvent(new MoneyWithdrawnEvent(this.id, amount));
     }
 
     public void deposit(BigDecimal amount) {
@@ -42,5 +46,6 @@ public class Account {
             throw new IllegalArgumentException();
         }
         this.balance = this.balance.add(amount);
+        registerEvent(new MoneyDepositedEvent(this.id, amount));
     }
 }

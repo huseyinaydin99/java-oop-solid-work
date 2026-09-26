@@ -126,3 +126,23 @@ En dıştaki kalkan olarak ExceptionHandlingTransferMoneyUseCaseDecorator sını
 Son olarak sunum katmanındaki Main sınıfına gidip tüm bu dekoratörleri soğanın cücüğünden kabuğuna doğru birbirinin içine yerleştirdim: En içte saf iş kurallarımız, onun üstünde transaction, sonra cache, güvenlik, loglama ve en dışta hata yönetimi!
 
 >İşte bu sayede SOLID'in "Tek Sorumluluk" (Single Responsibility) ve "Gelişime Açık, Değişime Kapalı" (Open-Closed) prensiplerini sonuna kadar yaşattım. İş mantığını hiçbir teknolojik detayla kirletmeden, mimarinin etrafına aşılmaz ve esnek bir altyapı zırhı ördüm!
+
+---
+
+Domain Events (Etki Alanı Olayları) entegrasyonu ile mimarimizi tam anlamıyla kurumsal (enterprise) ve olay güdümlü (event-driven) bir başyapıta dönüştürdüm. Onion mimarisinin en üst düzey tasarım tekniklerinden biri olan bu yapıyla, sistemdeki nesneler arasındaki o son "gizli" bağları (coupling) da koparıp attım.
+
+#### Peki bu kusursuz izolasyonu nasıl sağladım?
+
+#### 1. Çekirdeğin Kendi Hikayesini Yazması (Domain Layer): 
+
+İşin en merkezindeki Account varlığımızı sıradan bir nesne olmaktan çıkarıp, olayları takip edebilen bir AggregateRoot (Kök Varlık) haline getirdim. Artık bir hesaptan para çekildiğinde veya hesaba para yattığında, sınıfımız sadece bakiyeyi güncellemekle kalmıyor; aynı zamanda kendi hafızasında MoneyWithdrawnEvent veya MoneyDepositedEvent adında olaylar biriktiriyor. Çekirdeğimiz dışarıda kimin SMS atacağıyla veya e-posta göndereceğiyle zerre kadar ilgilenmiyor; sadece "Benim sınırlarım içinde bu olaylar yaşandı" diyerek kendi gerçekliğini kaydediyor.
+
+#### 2. Olayları Serbest Bırakan Köprü (Application Layer): 
+
+Uygulama katmanındaki TransferMoneyService sınıfını bu yeni düzene göre güncelledim. Para transferi hatasız bir şekilde tamamlanıp güncel hesaplar veritabanına kaydedildikten hemen sonra, nesnelerin hafızasında biriken bu olayları alıp DomainEventPublisher (Port) aracılığıyla sisteme fırlattım. Böylece ana iş akışımın sorumluluğunu tamamen "sadece parayı transfer etmek" sınırlarında tuttum.
+
+#### 3. Yan Etkileri Yakalayan Kulaklar (Infrastructure & Presentation): 
+
+Altyapıda, fırlatılan bu olayları yakalayıp dağıtacak InMemoryDomainEventPublisher (Olay Veriyolu) sınıfını inşa ettim. En dıştaki Main (Composition Root) sınıfımızda ise sisteme küçük bir dinleyici (listener) yerleştirdim. Artık sistemde bir para transferi gerçekleştiğinde, çekirdek kodumuzun ruhu bile duymadan arka planda "SMS Gönderiliyor..." veya "E-posta Atılıyor..." çıktıları bağımsızca tetikleniyor.
+
+>Bu entegrasyonla birlikte SOLID'in "Tek Sorumluluk" (Single Responsibility) ve "Açık-Kapalı" (Open-Closed) prensiplerini adeta Nirvana'ya taşıdım. Kurduğumuz bu mimari artık sadece test edilebilir ve esnek değil; aynı zamanda devasa mikroservis yapılarına, asenkron işlemlere ve mesaj kuyruklarına (RabbitMQ, Kafka vb.) anında entegre olabilecek kadar saf ve güçlü bir hale geldi!

@@ -2,6 +2,7 @@ package tr.com.huseyinaydin.application.service;
 
 import tr.com.huseyinaydin.application.dto.TransferRequest;
 import tr.com.huseyinaydin.application.port.out.AccountRepository;
+import tr.com.huseyinaydin.application.port.out.DomainEventPublisher;
 import tr.com.huseyinaydin.domain.entity.Account;
 import tr.com.huseyinaydin.domain.exception.InsufficientBalanceException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +19,14 @@ import static org.junit.jupiter.api.Assertions.*;
 class TransferMoneyServiceTest {
 
     private AccountRepository fakeRepository;
+    private DomainEventPublisher fakeEventPublisher;
     private TransferMoneyService transferMoneyService;
 
     @BeforeEach
     void setUp() {
         fakeRepository = new FakeAccountRepository();
-        transferMoneyService = new TransferMoneyService(fakeRepository);
+        fakeEventPublisher = event -> {}; // Dummy publisher for tests
+        transferMoneyService = new TransferMoneyService(fakeRepository, fakeEventPublisher);
     }
 
     @Test

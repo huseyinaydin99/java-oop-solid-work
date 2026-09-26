@@ -8,7 +8,10 @@ import tr.com.huseyinaydin.application.port.out.AccountRepository;
 import tr.com.huseyinaydin.application.port.out.TransactionManager;
 import tr.com.huseyinaydin.application.service.TransferMoneyService;
 import tr.com.huseyinaydin.domain.entity.Account;
+import tr.com.huseyinaydin.domain.event.MoneyDepositedEvent;
+import tr.com.huseyinaydin.domain.event.MoneyWithdrawnEvent;
 import tr.com.huseyinaydin.infrastructure.decorator.*;
+import tr.com.huseyinaydin.infrastructure.event.InMemoryDomainEventPublisher;
 import tr.com.huseyinaydin.infrastructure.persistence.AccountJpaEntity;
 import tr.com.huseyinaydin.infrastructure.persistence.HibernateAccountRepository;
 import tr.com.huseyinaydin.infrastructure.persistence.HibernateTransactionManager;
@@ -34,7 +37,18 @@ public class Main {
         AccountRepository accountRepository = new HibernateAccountRepository(sessionFactory);
         TransactionManager transactionManager = new HibernateTransactionManager(sessionFactory);
 
-        TransferMoneyUseCase transferMoneyService = new TransferMoneyService(accountRepository);
+        InMemoryDomainEventPublisher eventPublisher = new InMemoryDomainEventPublisher();
+        eventPublisher.subscribe(event -> {
+            if (event instanceof MoneyWithdrawnEvent) {
+                MoneyWithdrawnEvent e = (MoneyWithdrawnEvent) event;
+                System.out.println("EVENT LISTENER [SMS]: Çekilen para (" + e.getAmount() + ") hesap " + e.getAccountId());
+            } else if (event instanceof MoneyDepositedEvent) {
+                MoneyDepositedEvent e = (MoneyDepositedEvent) event;
+                System.out.println("EVENT LISTENER [EMAIL]: Yatırılan para (" + e.getAmount() + ") hesap " + e.getAccountId());
+            }
+        });
+
+        TransferMoneyUseCase transferMoneyService = new TransferMoneyService(accountRepository, eventPublisher);
         
         TransferMoneyUseCase transactionalDecorator = new TransactionalTransferMoneyUseCaseDecorator(transferMoneyService, transactionManager);
         TransferMoneyUseCase cachingDecorator = new CachingTransferMoneyUseCaseDecorator(transactionalDecorator);
