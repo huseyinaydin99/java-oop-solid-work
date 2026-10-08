@@ -23,7 +23,6 @@
         <property name="connection.username">postgres</property>
         <property name="connection.password">toor</property>
 
-
         <!--<property name="connection.pool_size">3</property>-->
         <!--<property name="current_session_context_class">thread</property>-->
         <property name="show_sql">true</property>
@@ -32,7 +31,7 @@
         <property name="hbm2ddl.auto">create</property>
 
         <mapping class="tr.com.huseyinaydin.entity.Customer"/>
-        <mapping class="tr.com.huseyinaydin.entity.Worker"/>
+        <mapping class="tr.com.huseyinaydin.entity.CustomerDetail"/>
 
     </session-factory>
 </hibernate-configuration>

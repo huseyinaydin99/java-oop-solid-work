@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>tr.com.huseyinaydin</groupId>
-  <artifactId>java-24-jpa-hibernate-orm</artifactId>
+  <artifactId>java-26-hibernate-one-to-one</artifactId>
   <version>1.0.0</version>
   <packaging>jar</packaging>
 
-  <name>java-24-jpa-hibernate-orm</name>
+  <name>java-26-hibernate-one-to-one</name>
   <url>http://maven.apache.org</url>
 
   <properties>
@@ -32,7 +32,7 @@
     <dependency>
       <groupId>org.hibernate.orm</groupId>
       <artifactId>hibernate-core</artifactId>
-      <version>6.5.2.Final</version>
+      <version>6.5.3.Final</version>
     </dependency>
     <!-- DB END -->
 
@@ -43,6 +43,12 @@
       <artifactId>lombok</artifactId>
       <version>1.18.36</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>jakarta.validation</groupId>
+      <artifactId>jakarta.validation-api</artifactId>
+      <version>3.1.0</version>
     </dependency>
     <!-- TOOLS END -->
 
@@ -58,4 +64,6 @@
     <!-- TEST END -->
 
   </dependencies>
+
+
 </project>
